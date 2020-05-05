@@ -13,7 +13,7 @@ int main(){
   TriangleIntegrator TI;
   LineIntegrator LT;
 
-  cout << TI.DoubleIntegral(Integrand, P1, P2, P3, 0.005, 0.005) << endl;
+  cout << TI.DoubleIntegral(Integrand, P1, P2, P3, 1000, 1000) << endl;
   cout << LT.LineIntegral(Integrand, P2, P3, 1000) << endl;;
   return 0;
 }

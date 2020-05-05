@@ -1,7 +1,11 @@
+//Here we use the fact that an integral over any triangle can be transformed easily into an integral over a square (0,1)x(0,1)
+//When we are integrating over the triangle the variables are x,y
+//When we are integrating over the square the variables are u, v
 #include "DblInt.h"
 
 TriangleIntegrator::TriangleIntegrator(void){}
 
+//Calculates the Jacobian of the transformation
 double TriangleIntegrator::dJ( double u, double v, double p1[2], double p2[2], double p3[2]){
 
   double dxdu = ( (1 - v) * p2[0] + v * p2[0] - p1[0] );
@@ -13,8 +17,10 @@ double TriangleIntegrator::dJ( double u, double v, double p1[2], double p2[2], d
   return std::abs( dxdu*dydv - dxdv*dydu );
 }
 
+//Calculates x or y, given u and v
 double TriangleIntegrator::Transf( double u, double v, double c1, double c2, double c3 ) {return (1 - u)*c1 + u*( (1 - v)*c2 + v*c3 );}
 
+//Calculates the integrand for a given u and v
 double TriangleIntegrator::TransfIntegrand( double (*integrand)(double, double), double u, double v, double p1[2], double p2[2], double p3[2] ){
 
   double x = Transf( u, v, p1[0], p2[0], p3[0]);
@@ -26,67 +32,50 @@ double TriangleIntegrator::TransfIntegrand( double (*integrand)(double, double),
   return I;
 }
 
-double TriangleIntegrator::DoubleIntegral(double (*integrand)(double,double),
-                                          double p1[2], double p2[2], double p3[2],
-                                          double h, double k
+//Calculates the double integral using Simpson's Rule
+double TriangleIntegrator::DoubleIntegral(double (*integrand)(double,double), //Integrand
+                                          double p1[2], double p2[2], double p3[2], //Vertices
+                                          double n, double m //Parameters for integration
                                           ){
 
-  double lx = 0;
-  double ux = 1;
-  double ly = 0;
-  double uy = 1;
+  //Here we apply Simpson's Double Integral method. This is not a general method. It is simplified for the current problem
+  //in order to save memory and optimize the algorithm
 
-  int nx, ny;
-  
-  // z stores the table
-  // ax[] stores the integral wrt y
-  // for all x points considered
-  double z[500][500];
-  double ax[500];
+  double h = 1./n;
+  double J1 = 0.;
+  double J2 = 0.;
+  double J3 = 0.;
 
-  double answer;
+  for( int i = 0; i <= n; i++ ){
 
-  // Calculating the numner of points
-  // in x and y integral
-  nx = (ux - lx) / h + 1;
-  ny = (uy - ly) / k + 1;
+    double x = i*h;
+    double HX = 1./m;
 
-  // Calculating the values of the table
-  for (int i = 0; i < nx; ++i) {
-    for (int j = 0; j < ny; ++j) {
-      z[i][j] = TransfIntegrand( (*integrand), lx + i * h, ly + j * k, p1, p2, p3);
+    double K1 = TransfIntegrand( (*integrand), x, 0., p1, p2, p3) + TransfIntegrand( (*integrand), x, 1., p1, p2, p3);
+    double K2 = 0.;
+    double K3 = 0.;
+
+
+    for (int j = 1; j < m; j++){
+
+      double y = j*HX;
+      double Q = TransfIntegrand( (*integrand), x, y, p1, p2, p3);
+
+      if (j%2 == 0) K2 += Q;
+
+      else K3 += Q;
     }
+
+    double L = (K1 + 2.*K2 + 4.*K3)*HX/3.;
+
+    if (i == 0 || i == n) J1 += L;
+
+    else if( i%2 == 0) J2 += L;
+
+    else J3 += L;
   }
 
-  // Calculating the integral value
-  // wrt y at each point for x
-  for (int i = 0; i < nx; ++i) {
-    ax[i] = 0;
-    for (int j = 0; j < ny; ++j) {
+  double J = h*( J1 + 2.*J2 + 4.*J3 ) / 3.;
 
-      if (j == 0 || j == ny - 1)
-        ax[i] += z[i][j];
-      else if (j % 2 == 0)
-        ax[i] += 2 * z[i][j];
-      else
-        ax[i] += 4 * z[i][j];
-    }
-    ax[i] *= (k / 3);
-  }
-
-  answer = 0;
-
-  // Calculating the final integral value
-  // using the integral obtained in the above step
-  for (int i = 0; i < nx; ++i) {
-    if (i == 0 || i == nx - 1)
-      answer += ax[i];
-    else if (i % 2 == 0)
-      answer += 2 * ax[i];
-    else
-      answer += 4 * ax[i];
-  }
-  answer *= (h / 3);
-
-  return answer;
+  return J;
 }

@@ -12,19 +12,18 @@ class LineIntegrator{
  public:
   LineIntegrator();
 
-  //Calculates the Jacobian for the transformation from a triangle to a square
+  //Calculates the Jacobian for the transformation from a variables x,y to parameter t
   double dJ( double *, double * );
 
-  //Transforms from the square coordinates to the original cartesian coordinates
+  //Calculates x(t) and y(t). The parameters are: t, c1, c2. Where c is either x or y
   double Transf( double, double, double );
 
-  //Evaluates the transformed integrand
+  //Evaluates the integrand given t and the endpoints
   double TransfIntegrand(double, double (*)(double, double), double *, double *);
 
-  //Calculates the double integral from certain integrand in a triangle defined by three vertices
+  //Calculates the line integral using the Composite Simpson's Rule
   double LineIntegral( double (*)(double, double), double *, double *, double );
 
-  double f(double t);
 };
 
 #endif
