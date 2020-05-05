@@ -1,4 +1,4 @@
-#include "Integrator.h"
+#include "DblInt.h"
 
 TriangleIntegrator::TriangleIntegrator(void){}
 

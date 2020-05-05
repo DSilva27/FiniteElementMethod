@@ -1,4 +1,5 @@
-#include "Integrator.h"
+#include "DblInt.h"
+#include "LInt.h"
 #include <iostream>
 
 double Integrand( double, double );
@@ -9,10 +10,11 @@ int main(){
   double P2[2] = {2.,2.};
   double P3[2] = {4.,2.};
 
-  TriangleIntegrator TI;;
+  TriangleIntegrator TI;
+  LineIntegrator LT;
 
   cout << TI.DoubleIntegral(Integrand, P1, P2, P3, 0.005, 0.005) << endl;
-
+  cout << LT.LineIntegral(Integrand, P2, P3, 1000) << endl;;
   return 0;
 }
 

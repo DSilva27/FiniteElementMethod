@@ -1,5 +1,5 @@
-#ifndef INTEGRATOR_H
-#define INTEGRATOR_H
+#ifndef LINT_H
+#define LINT_H
 
 #include <cmath>
 #include <vector>
