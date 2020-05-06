@@ -37,6 +37,20 @@ double TriangleIntegrator::TransfIntegrand( vector <double (*)(double, double)> 
   return I;
 }
 
+double TriangleIntegrator::TransfIntegrand( double (*integrand)(double, double), double u, double v, double p1[2], double p2[2], double p3[2] ){
+
+  double x = Transf( u, v, p1[0], p2[0], p3[0]);
+  double y = Transf( u, v, p1[1], p2[1], p3[1]);
+
+  double I;
+
+  I = (*integrand)(x, y);
+
+  I *= dJ( u, v, p1, p2, p3 );
+
+  return I;
+}
+
 //Calculates the double integral using Simpson's Rule
 double TriangleIntegrator::DoubleIntegral(vector <double (*)(double,double)> v, //Integrand
                                           double p1[2], double p2[2], double p3[2], //Vertices
@@ -65,6 +79,53 @@ double TriangleIntegrator::DoubleIntegral(vector <double (*)(double,double)> v, 
 
       double y = j*HX;
       double Q = TransfIntegrand( v, x, y, p1, p2, p3);
+
+      if (j%2 == 0) K2 += Q;
+
+      else K3 += Q;
+    }
+
+    double L = (K1 + 2.*K2 + 4.*K3)*HX/3.;
+
+    if (i == 0 || i == n) J1 += L;
+
+    else if( i%2 == 0) J2 += L;
+
+    else J3 += L;
+  }
+
+  double J = h*( J1 + 2.*J2 + 4.*J3 ) / 3.;
+
+  return J;
+}
+
+double TriangleIntegrator::DoubleIntegral(double (*integrand)(double,double), //Integrand
+                                          double p1[2], double p2[2], double p3[2], //Vertices
+                                          double n, double m //Parameters for integration
+                                          ){
+
+  //Here we apply Simpson's Double Integral method. This is not a general method. It is simplified for the current problem
+  //in order to save memory and optimize the algorithm
+
+  double h = 1./n;
+  double J1 = 0.;
+  double J2 = 0.;
+  double J3 = 0.;
+
+  for( int i = 0; i <= n; i++ ){
+
+    double x = i*h;
+    double HX = 1./m;
+
+    double K1 = TransfIntegrand( (*integrand), x, 0., p1, p2, p3) + TransfIntegrand( (*integrand), x, 1., p1, p2, p3);
+    double K2 = 0.;
+    double K3 = 0.;
+
+
+    for (int j = 1; j < m; j++){
+
+      double y = j*HX;
+      double Q = TransfIntegrand( (*integrand), x, y, p1, p2, p3);
 
       if (j%2 == 0) K2 += Q;
 
