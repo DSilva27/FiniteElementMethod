@@ -1,9 +1,8 @@
-#ifndef DBLINT_H
-#define DBLINT_H
+#ifndef LINT_H
+#define LINT_H
 
 #include <cmath>
 #include <vector>
-#include <gsl/gsl_integration.h>
 
 using namespace std;
 
@@ -19,10 +18,9 @@ class LineIntegrator{
   double Transf( double, double, double );
 
   //Evaluates the integrand given t and the endpoints
-  double TransfIntegrand(double, double (*)(double, double), double *, double *);
-
+  double TransfIntegrand(double, vector <double (*)(double, double)>, double *, double *);
   //Calculates the line integral using the Composite Simpson's Rule
-  double LineIntegral( double (*)(double, double), double *, double *, double );
+  double LineIntegral( vector <double (*)(double, double)>, double *, double *, double );
 
 };
 

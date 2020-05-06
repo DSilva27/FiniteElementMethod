@@ -21,19 +21,24 @@ double TriangleIntegrator::dJ( double u, double v, double p1[2], double p2[2], d
 double TriangleIntegrator::Transf( double u, double v, double c1, double c2, double c3 ) {return (1 - u)*c1 + u*( (1 - v)*c2 + v*c3 );}
 
 //Calculates the integrand for a given u and v
-double TriangleIntegrator::TransfIntegrand( double (*integrand)(double, double), double u, double v, double p1[2], double p2[2], double p3[2] ){
+double TriangleIntegrator::TransfIntegrand( vector <double (*)(double, double)> vec, double u, double v, double p1[2], double p2[2], double p3[2] ){
 
   double x = Transf( u, v, p1[0], p2[0], p3[0]);
   double y = Transf( u, v, p1[1], p2[1], p3[1]);
 
-  double I = (*integrand)( x, y );
+  double I = 1;
+
+  for (int i = 0; i < vec.size(); i++){
+    I *= vec[i](x, y);
+  }
+
   I *= dJ( u, v, p1, p2, p3 );
 
   return I;
 }
 
 //Calculates the double integral using Simpson's Rule
-double TriangleIntegrator::DoubleIntegral(double (*integrand)(double,double), //Integrand
+double TriangleIntegrator::DoubleIntegral(vector <double (*)(double,double)> v, //Integrand
                                           double p1[2], double p2[2], double p3[2], //Vertices
                                           double n, double m //Parameters for integration
                                           ){
@@ -51,7 +56,7 @@ double TriangleIntegrator::DoubleIntegral(double (*integrand)(double,double), //
     double x = i*h;
     double HX = 1./m;
 
-    double K1 = TransfIntegrand( (*integrand), x, 0., p1, p2, p3) + TransfIntegrand( (*integrand), x, 1., p1, p2, p3);
+    double K1 = TransfIntegrand( v, x, 0., p1, p2, p3) + TransfIntegrand( v, x, 1., p1, p2, p3);
     double K2 = 0.;
     double K3 = 0.;
 
@@ -59,7 +64,7 @@ double TriangleIntegrator::DoubleIntegral(double (*integrand)(double,double), //
     for (int j = 1; j < m; j++){
 
       double y = j*HX;
-      double Q = TransfIntegrand( (*integrand), x, y, p1, p2, p3);
+      double Q = TransfIntegrand( v, x, y, p1, p2, p3);
 
       if (j%2 == 0) K2 += Q;
 

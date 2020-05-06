@@ -1,5 +1,5 @@
-#ifndef LINT_H
-#define LINT_H
+#ifndef DBLINT_H
+#define DBLLINT_H
 
 #include <cmath>
 #include <vector>
@@ -18,10 +18,10 @@ class TriangleIntegrator{
   double Transf( double, double, double, double, double );
 
   //Evaluates the transformed integrand
-  double TransfIntegrand(double (*)(double, double), double, double, double *, double *, double * );
+  double TransfIntegrand(vector <double (*)(double, double)>, double, double, double *, double *, double * );
 
   //Calculates the double integral from certain integrand in a triangle defined by three vertices
-  double DoubleIntegral( double (*)(double, double), double *, double *, double *, double, double );
+  double DoubleIntegral( vector <double (*)(double, double)>, double *, double *, double *, double, double );
 };
 
 #endif
