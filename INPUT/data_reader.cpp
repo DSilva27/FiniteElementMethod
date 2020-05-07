@@ -1,14 +1,14 @@
-#include "INPUT/data_reader.h"
+#include "data_reader.h"
 
 void ExtractInfo(int *KPTR,
-		 int *NPTR,
-		 int *MPTR,
-		 int *nPTR,
-		 int *mPTR,
-		 vector<vector <double>> &vec){
+                 int *NPTR,
+                 int *MPTR,
+                 int *nPTR,
+                 int *mPTR,
+                 vector<vector <double>> &vec){
 
   std::ifstream File;
-  File.open("INPUT/triangles.txt");
+  File.open("triangles.txt");
 
   //For reading the info in File
   int node;
