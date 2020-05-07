@@ -2,20 +2,20 @@
 
 int main(){
 
-  vector <vector <double>> M {{1,2},{3,4}};
+  vector <vector <double>> M {{1, -1, 1},{1, 6, 2}, {1, 3, 7}};
 
-  vector <double> B {5,6};
+  vector <double> B {1, 0, 4};
 
   vector <double> x(B.size(), 0);
 
   Linalg Solver;
 
-  Solver.Solve(x, M, B);
+  Solver.SOR(M, B, x, 1.25, 0.003, 20);
 
   for(int i = 0; i < B.size(); i++){
     cout << x[i] << endl;
   }
 
-  cout << Solver.Determinant(M) << endl;
+  cout << Solver.Det33(M) << endl;
   return 0;
 }
