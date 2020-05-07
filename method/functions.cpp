@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include "triangle.h" //??
 #include "finite_element.h"
 #include <Armadillo>
 
@@ -17,14 +19,47 @@ FiniteElement::~FiniteElement(){
 
 
 void FiniteElement::load_data(){
+  
+  vector <vector <double>> vertices_vec;
+  vector <int> nodes_vec;
+  vector <int> boundary_vec;
+  
+  int count = 1; // To know in which triangle we are at
+  int number, node, bound;
+  double x, y;
+  
   K = 2;
   N = 6;
   M = 10;
   n = 5;
   m = 11;
   
+  file.open("data/data_triangles.txt");
   
+  while (file >> number >> node >> x >> y << bound){
+    if ( number == count ){
+      
+      // Fill vectors with data
+      vertices_vec.push_back({x, y});
+      nodes_vec.push_back(node);
+      boundary_vec.push_back(boundary);
+    }
+    
+    else{
+      
+      // When no more data about that triangle, push back element and increase count
+      Triangle triangle(vertices_vec, nodes_vec, boundary_vec);
+      elements.push_back(triangle);
+      
+      vertices_vec.clear();
+      nodes_vec.clear();
+      boundary_vec.clear();
+      
+      count += 1;
+    }
+  }
   
+  file.close();
 }
 
 

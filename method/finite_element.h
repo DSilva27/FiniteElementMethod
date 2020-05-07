@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 
+#include "triangle.h"
+
 using namespace std;
 
 class FiniteElement{
