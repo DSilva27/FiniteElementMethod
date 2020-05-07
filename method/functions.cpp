@@ -3,8 +3,10 @@
 #include <fstream>
 #include "triangle.h" //??
 #include "finite_element.h"
+#include <Armadillo>
 
 using namespace std;
+using namespace arma;
 
 FiniteElement::FiniteElement(){
   cout << "Bienvenido" << endl;
@@ -63,9 +65,14 @@ void FiniteElement::load_data(){
 
 void FiniteElement::solve(){
   
-  vector <double> gamma(m);
-  vector <double> beta(n);
-  vector <vector <double>> alpha(n, vector <double> (n));
+  // vector <double> gamma(m);
+  // vector <double> beta(n);
+  // vector <vector <double>> alpha(n, vector <double> (n));
+
+  vec gamma(m);
+  vec beta(n);
+  mat alpha(n,n);
+
   vector <vector <vector <double>>> N_coef(M, vector < vector <double>> (3, vector <double> (3)));
   vector <vector <vector <double>>> z(M, vector < vector <double>> (3, vector <double> (3)));
   vector <vector <vector <double>>> J((N-K-1), vector < vector <double>> (3, vector <double> (3)));
@@ -83,7 +90,8 @@ void FiniteElement::solve(){
   
   // Step 1
   for (int l=n+1; l<m; l++){
-    gamma[l] = g(vertex[l][0], vertex[l][0]); // g def is missing
+    //gamma[l] = g(vertex[l][0], vertex[l][0]); // g def is missing
+    gamma.at(l) = g(vertex[l][0], vertex[l][0]); // g def is missing
   }
   
   // Step 2 is not necessary because vectors are already initialized to 0
@@ -152,21 +160,29 @@ void FiniteElement::solve(){
           // Step 11
           if (l <= n){
             if (t <= n){
-              alpha[l][t] += z[i][k][j];
-              alpha[t][l] += z[i][k][j];
+              // alpha[l][t] += z[i][k][j];
+              // alpha[t][l] += z[i][k][j];
+
+              alpha.at(l,t) += z[i][k][j];
+              alpha.at(t,l) += z[i][k][j];
             }
             
-            else beta[l] -= gamma[t]*z[i][k][j];
+            // else beta[l] -= gamma[t]*z[i][k][j];
+            else beta.at(l) -= gamma.at(t)*z[i][k][j];
           }
           
-          else if (t <= n) beta[t] -= gamma[l]*z[i][k][j];
+          // else if (t <= n) beta[t] -= gamma[l]*z[i][k][j];
+          else if (t <= n) beta.at(t) -= gamma.at(l)*z[i][k][j];
         }
       }
       
       // Step 12
       if (l <= n){
-        alpha[l][l] += z[i][k][k];
-        beta[l] += H[i][k];
+        // alpha[l][l] += z[i][k][k];
+        // beta[l] += H[i][k];
+
+        alpha.at(l,l) += z[i][k][k];
+        beta.at(l) += H[i][k];
       }
     }
   }
