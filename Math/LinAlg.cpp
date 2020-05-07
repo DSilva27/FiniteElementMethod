@@ -21,7 +21,7 @@ Linalg::Linalg(void){}
 //   }
 // }
 
-void Linalg::SOR( const vector < vector< double > > M, const vector < double > b, vector < double > &XO,
+void Linalg::SOR( const mat M, const vec b, vec &XO,
          const double w, const double TOL, const int N ){
 
   int k = 1;
@@ -71,7 +71,7 @@ void Linalg::SOR( const vector < vector< double > > M, const vector < double > b
   return;
 }
 
-double Linalg::DistBetVectors( vector < double > v1, vector < double > v2){
+double Linalg::DistBetVectors( vec v1, vec v2){
 
   double dist;
   for(int i = 0; i < v1.size(); i++){
@@ -98,7 +98,7 @@ double Linalg::DistBetVectors( vector < double > v1, vector < double > v2){
 //   return det(A);
 // }
 
-double Linalg::Det33(vector < vector<double>> M){
+double Linalg::Det33(mat M){
 
   double det;
 

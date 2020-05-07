@@ -9,6 +9,8 @@
 using namespace std;
 //using namespace arma;
 
+typedef vector < double > vec;
+typedef vector < vec > mat;
 
 class Linalg{
  public:
@@ -16,11 +18,11 @@ class Linalg{
 
   //  void Solve( vector< double > &, vector< vector< double > >, vector< double > );
 
-  void SOR(const vector < vector< double > >, const vector < double >, vector < double > &, const double, const double, const int);
-  double DistBetVectors( vector < double >, vector < double >);
+  void SOR(const mat, const vec, vec &, const double, const double, const int);
+  double DistBetVectors( const vec, const vec);
 
   //double Determinant( vector< vector< double > > );
-  double Det33(vector <vector <double> >);
+  double Det33( mat );
 };
 
 

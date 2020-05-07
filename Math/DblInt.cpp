@@ -21,7 +21,7 @@ double TriangleIntegrator::dJ( double u, double v, double p1[2], double p2[2], d
 double TriangleIntegrator::Transf( double u, double v, double c1, double c2, double c3 ) {return (1 - u)*c1 + u*( (1 - v)*c2 + v*c3 );}
 
 //Calculates the integrand for a given u and v
-double TriangleIntegrator::TransfIntegrand( vector <double (*)(double, double)> vec, double u, double v, double p1[2], double p2[2], double p3[2] ){
+double TriangleIntegrator::TransfIntegrand( vfunc vec, double u, double v, double p1[2], double p2[2], double p3[2] ){
 
   double x = Transf( u, v, p1[0], p2[0], p3[0]);
   double y = Transf( u, v, p1[1], p2[1], p3[1]);
@@ -37,7 +37,7 @@ double TriangleIntegrator::TransfIntegrand( vector <double (*)(double, double)> 
   return I;
 }
 
-double TriangleIntegrator::TransfIntegrand( double (*integrand)(double, double), double u, double v, double p1[2], double p2[2], double p3[2] ){
+double TriangleIntegrator::TransfIntegrand( func integrand, double u, double v, double p1[2], double p2[2], double p3[2] ){
 
   double x = Transf( u, v, p1[0], p2[0], p3[0]);
   double y = Transf( u, v, p1[1], p2[1], p3[1]);
@@ -52,7 +52,7 @@ double TriangleIntegrator::TransfIntegrand( double (*integrand)(double, double),
 }
 
 //Calculates the double integral using Simpson's Rule
-double TriangleIntegrator::DoubleIntegral(vector <double (*)(double,double)> v, //Integrand
+double TriangleIntegrator::DoubleIntegral(vfunc v, //Integrand
                                           double p1[2], double p2[2], double p3[2], //Vertices
                                           double n, double m //Parameters for integration
                                           ){
@@ -99,7 +99,7 @@ double TriangleIntegrator::DoubleIntegral(vector <double (*)(double,double)> v, 
   return J;
 }
 
-double TriangleIntegrator::DoubleIntegral(double (*integrand)(double,double), //Integrand
+double TriangleIntegrator::DoubleIntegral(func integrand, //Integrand
                                           double p1[2], double p2[2], double p3[2], //Vertices
                                           double n, double m //Parameters for integration
                                           ){

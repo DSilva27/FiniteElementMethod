@@ -6,6 +6,9 @@
 
 using namespace std;
 
+typedef double (*func)(double, double);
+typedef vector< func > vfunc;
+
 class LineIntegrator{
 
  public:
@@ -18,9 +21,9 @@ class LineIntegrator{
   double Transf( double, double, double );
 
   //Evaluates the integrand given t and the endpoints
-  double TransfIntegrand(double, vector <double (*)(double, double)>, double *, double *);
+  double TransfIntegrand(double, vfunc, double *, double *);
   //Calculates the line integral using the Composite Simpson's Rule
-  double LineIntegral( vector <double (*)(double, double)>, double *, double *, double );
+  double LineIntegral( vfunc, double *, double *, double );
 
 };
 

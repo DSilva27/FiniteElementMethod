@@ -5,7 +5,7 @@
 using namespace std;
 
 
-Triangle::Triangle(vector <vector <double>> vert,
+Triangle::Triangle(mat vert,
                    vector <int> nod,
                    vector <int> bound){
     cout << "Bienvenido" << endl;

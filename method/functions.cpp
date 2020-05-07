@@ -3,10 +3,10 @@
 #include <fstream>
 #include "triangle.h" //??
 #include "finite_element.h"
-#include <Armadillo>
+//#include <Armadillo>
 
 using namespace std;
-using namespace arma;
+//using namespace arma;
 
 FiniteElement::FiniteElement(){
   cout << "Bienvenido" << endl;
@@ -20,7 +20,7 @@ FiniteElement::~FiniteElement(){
 
 void FiniteElement::load_data(){
   
-  vector <vector <double>> vertices_vec;
+  mat vertices_vec;
   vector <int> nodes_vec;
   vector <int> boundary_vec;
   
@@ -71,13 +71,13 @@ void FiniteElement::solve(){
 
   vec gamma(m);
   vec beta(n);
-  mat alpha(n,n);
+  mat alpha(n, vec(n));
 
-  vector <vector <vector <double>>> N_coef(M, vector < vector <double>> (3, vector <double> (3)));
-  vector <vector <vector <double>>> z(M, vector < vector <double>> (3, vector <double> (3)));
-  vector <vector <vector <double>>> J((N-K-1), vector < vector <double>> (3, vector <double> (3)));
-  vector <vector <double>> I((N-K-1), vector <double> (3));
-  vector <vector <double>> H(M, vector <double> (3));
+  cube N_coef(M, mat(3, vec(3)));
+  cube z(M, mat(3, vec(3)));
+  cube J((N-K-1), mat(3, vec(3)));
+  mat I((N-K-1), vec(3));
+  mat H(M, vec (3));
   
   double det;
   double integral_p, integral_q, integral_r;
@@ -90,8 +90,8 @@ void FiniteElement::solve(){
   
   // Step 1
   for (int l=n+1; l<m; l++){
-    //gamma[l] = g(vertex[l][0], vertex[l][0]); // g def is missing
-    gamma.at(l) = g(vertex[l][0], vertex[l][0]); // g def is missing
+    gamma[l] = g(vertex[l][0], vertex[l][0]); // g def is missing
+    //    gamma.at(l) = g(vertex[l][0], vertex[l][0]); // g def is missing
   }
   
   // Step 2 is not necessary because vectors are already initialized to 0
@@ -160,29 +160,29 @@ void FiniteElement::solve(){
           // Step 11
           if (l <= n){
             if (t <= n){
-              // alpha[l][t] += z[i][k][j];
-              // alpha[t][l] += z[i][k][j];
+              alpha[l][t] += z[i][k][j];
+              alpha[t][l] += z[i][k][j];
 
-              alpha.at(l,t) += z[i][k][j];
-              alpha.at(t,l) += z[i][k][j];
+              // alpha.at(l,t) += z[i][k][j];
+              // alpha.at(t,l) += z[i][k][j];
             }
             
-            // else beta[l] -= gamma[t]*z[i][k][j];
-            else beta.at(l) -= gamma.at(t)*z[i][k][j];
+            else beta[l] -= gamma[t]*z[i][k][j];
+            // else beta.at(l) -= gamma.at(t)*z[i][k][j];
           }
           
-          // else if (t <= n) beta[t] -= gamma[l]*z[i][k][j];
-          else if (t <= n) beta.at(t) -= gamma.at(l)*z[i][k][j];
+          else if (t <= n) beta[t] -= gamma[l]*z[i][k][j];
+          // else if (t <= n) beta.at(t) -= gamma.at(l)*z[i][k][j];
         }
       }
       
       // Step 12
       if (l <= n){
-        // alpha[l][l] += z[i][k][k];
-        // beta[l] += H[i][k];
+        alpha[l][l] += z[i][k][k];
+        beta[l] += H[i][k];
 
-        alpha.at(l,l) += z[i][k][k];
-        beta.at(l) += H[i][k];
+        // alpha.at(l,l) += z[i][k][k];
+        // beta.at(l) += H[i][k];
       }
     }
   }

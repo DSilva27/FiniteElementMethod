@@ -24,7 +24,7 @@ double LineIntegrator::dJ( double p1[2], double p2[2]){
 double LineIntegrator::Transf( double t, double c1, double c2 ) {return t*( c2 - c1 ) + c1;}
 
 //Transforms the integrand to the parametrized form and calculates it
-double LineIntegrator::TransfIntegrand( double t, vector <double (*)(double, double)> v, double p1[2], double p2[2] ){
+double LineIntegrator::TransfIntegrand( double t, vfunc v, double p1[2], double p2[2] ){
 
   double x = Transf( t, p1[0], p2[0]);
   double y = Transf( t, p1[1], p2[1]);
@@ -41,7 +41,7 @@ double LineIntegrator::TransfIntegrand( double t, vector <double (*)(double, dou
 }
 
 //n must be a positive, even integer
-double LineIntegrator::LineIntegral( vector <double (*)(double,double)> v,
+double LineIntegrator::LineIntegral( vfunc v,
                                      double p1[2], double p2[2], double n ){
 
   //Here we integrate using the Composite Simpson's rule

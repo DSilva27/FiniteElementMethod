@@ -5,7 +5,7 @@ void ExtractInfo(int *KPTR,
                  int *MPTR,
                  int *nPTR,
                  int *mPTR,
-                 vector<vector <double>> &vec){
+                 mat &vec){
 
   std::ifstream File;
   File.open("triangles.txt");
@@ -26,7 +26,7 @@ void ExtractInfo(int *KPTR,
   //Initializes the vector that will be filled
   for (int i = 0; i < *mPTR; i++){
 
-    vector<double> subVector(2);
+    vec subVector(2);
     vec.push_back(subVector);
   }
   

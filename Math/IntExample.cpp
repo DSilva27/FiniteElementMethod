@@ -5,13 +5,15 @@
 double Integrand( double, double );
 double Integrand2( double, double );
 double Integrand3( double, double );
+
+
 int main(){
 
   double P1[2] = {3.,1.};
   double P2[2] = {2.,2.};
   double P3[2] = {4.,2.};
 
-  vector <double (*)(double, double)> v { Integrand, Integrand2 };
+  vfunc v { Integrand, Integrand2 };
   TriangleIntegrator TI;
   LineIntegrator LT;
 

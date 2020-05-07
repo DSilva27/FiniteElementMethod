@@ -9,6 +9,8 @@
 
 using namespace std;
 
+typedef vector< double > vec;
+typedef vector< vec > mat;
 //This function extracts the information from the triangles file
 //It assigns the corresponding x, y values for certain node
 void ExtractInfo(int*, //K
@@ -16,7 +18,7 @@ void ExtractInfo(int*, //K
         int*, //M
         int*, //n
         int*, //m
-        vector<vector <double> > & //vertex
+        mat & //vertex
         );
   
 #endif

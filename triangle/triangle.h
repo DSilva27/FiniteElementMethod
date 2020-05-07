@@ -4,17 +4,19 @@
 #include <iostream>
 #include <vector>
 
+typedef vector< vector< double >> mat;
+
 using namespace std;
 
 class Triangle{
     friend class FiniteElement;
     
     public:
-    Triangle(vector <vector <double>>, vector <int>, vector <int>);
+    Triangle(mat, vector <int>, vector <int>);
     ~Triangle();
     
     //private:
-    vector <vector <double>> vertices;
+    mat vertices;
     vector <int> nodes;
     vector <int> boundary;
 };

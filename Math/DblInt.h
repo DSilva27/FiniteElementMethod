@@ -6,6 +6,9 @@
 
 using namespace std;
 
+typedef double (*func)(double, double);
+typedef vector< func > vfunc;
+
 class TriangleIntegrator{
 
  public:
@@ -18,15 +21,15 @@ class TriangleIntegrator{
   double Transf( double, double, double, double, double );
 
   //Evaluates the transformed integrand
-  double TransfIntegrand(vector <double (*)(double, double)>, double, double, double *, double *, double * );
+  double TransfIntegrand(vfunc, double, double, double *, double *, double * );
 
   //If there is just one function
-  double TransfIntegrand(double (*)(double, double), double, double, double *, double *, double * );
+  double TransfIntegrand(func, double, double, double *, double *, double * );
 
   //Calculates the double integral from certain integrand in a triangle defined by three vertices
-  double DoubleIntegral( vector <double (*)(double, double)>, double *, double *, double *, double, double );
+  double DoubleIntegral( vfunc, double *, double *, double *, double, double );
 
-  double DoubleIntegral( double (*)(double, double), double *, double *, double *, double, double );
+  double DoubleIntegral( func, double *, double *, double *, double, double );
 };
 
 #endif
