@@ -5,10 +5,10 @@
 using namespace std;
 
 int main(){
-    
-    FiniteElement ex;
-    
-    
-    return 0;
+  
+  FiniteElement ex;
+  
+  
+  return 0;
 }
 
