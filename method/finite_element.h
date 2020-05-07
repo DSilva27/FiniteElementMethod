@@ -17,7 +17,7 @@ class FiniteElement{
   void solve();
   ~FiniteElement();
   
-  private:
+  //private:
   int K;
   int N;
   int M;

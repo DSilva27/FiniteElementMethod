@@ -23,6 +23,7 @@ void FiniteElement::load_data(){
   mat vertices_vec;
   vector <int> nodes_vec;
   vector <int> boundary_vec;
+  ifstream file;
   
   int count = 1; // To know in which triangle we are at
   int number, node, bound;
@@ -34,19 +35,11 @@ void FiniteElement::load_data(){
   n = 5;
   m = 11;
   
-  file.open("data/data_triangles.txt");
+  file.open("../data/data_triangles.txt");
   
-  while (file >> number >> node >> x >> y << bound){
-    if ( number == count ){
-      
-      // Fill vectors with data
-      vertices_vec.push_back({x, y});
-      nodes_vec.push_back(node);
-      boundary_vec.push_back(boundary);
-    }
+  while (file >> number >> node >> x >> y >> bound){
     
-    else{
-      
+    if ( number != count ){
       // When no more data about that triangle, push back element and increase count
       Triangle triangle(vertices_vec, nodes_vec, boundary_vec);
       elements.push_back(triangle);
@@ -57,6 +50,12 @@ void FiniteElement::load_data(){
       
       count += 1;
     }
+      
+    // Fill vectors with data
+    vertices_vec.push_back({x, y});
+    nodes_vec.push_back(node);
+    boundary_vec.push_back(bound);
+    
   }
   
   file.close();
@@ -193,5 +192,3 @@ void FiniteElement::solve(){
   
   
 }
-
-
