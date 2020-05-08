@@ -67,11 +67,11 @@ void FiniteElement::solve(){
   // vector <double> gamma(m);
   // vector <double> beta(n);
   // vector <vector <double>> alpha(n, vector <double> (n));
-
+  
   vec gamma(m);
   vec beta(n);
   mat alpha(n, vec(n));
-
+  
   cube N_coef(M, mat(3, vec(3)));
   cube z(M, mat(3, vec(3)));
   cube J((N-K-1), mat(3, vec(3)));
@@ -81,15 +81,15 @@ void FiniteElement::solve(){
   double det;
   double integral_p, integral_q, integral_r;
   
-  double x1, x2, x3;
-  double y1, y2, y3;
+  //double element[i].vertices[0][0], element[i].vertices[2][0], element[i].vertices[2][0];
+  //double element[i].vertices[0][1], element[i].vertices[1][1], element[i].vertices[2][1];
   
   int l, t;
   
   
   // Step 1
   for (int l=n+1; l<m; l++){
-    gamma[l] = g(vertex[l][0], vertex[l][0]); // g def is missing
+    gamma[l] = g(elements[l].vertices[0], vertex[l][0]); // g def is missing
     //    gamma.at(l) = g(vertex[l][0], vertex[l][0]); // g def is missing
   }
   
@@ -100,17 +100,20 @@ void FiniteElement::solve(){
     det = 1; // det function is missing
     
     // Coefficients of the function N(x, y)
-    N_coef[i][0][0] = (x2*y3 - y2*x3)/det; // Must define xi, yi
-    N_coef[i][0][1] = (x3*y1 - y3*x1)/det;
-    N_coef[i][0][2] = (x1*y2 - y1*x2)/det;
+    N_coef[i][0][0] = (element[i].vertices[1][0]*element[i].vertices[2][1]\
+                       - element[i].vertices[1][1]*element[i].vertices[2][0])/det;
+    N_coef[i][0][1] = (element[i].vertices[2][0]*element[i].vertices[0][1]\
+                       - element[i].vertices[2][1]*element[i].vertices[0][0])/det;
+    N_coef[i][0][2] = (element[i].vertices[0][0]*element[i].vertices[1][1]\
+                       - element[i].vertices[0][1]*element[i].vertices[1][0])/det;
     
-    N_coef[i][1][0] = (y2 - y3)/det;
-    N_coef[i][1][1] = (y3 - y1)/det;
-    N_coef[i][1][2] = (y1 - y2)/det;
+    N_coef[i][1][0] = (element[i].vertices[1][1] - element[i].vertices[2][1])/det;
+    N_coef[i][1][1] = (element[i].vertices[2][1] - element[i].vertices[0][1])/det;
+    N_coef[i][1][2] = (element[i].vertices[0][1] - element[i].vertices[1][1])/det;
     
-    N_coef[i][2][0] = (x3 - x2)/det;
-    N_coef[i][2][1] = (x1 - x3)/det;
-    N_coef[i][2][2] = (x2 - x1)/det;
+    N_coef[i][2][0] = (element[i].vertices[2][0] - element[i].vertices[1][0])/det;
+    N_coef[i][2][1] = (element[i].vertices[0][0] - element[i].vertices[2][0])/det;
+    N_coef[i][2][2] = (element[i].vertices[1][0] - element[i].vertices[0][0])/det;
   }
   
   // Step 4
@@ -148,13 +151,13 @@ void FiniteElement::solve(){
     // Step 7
     for (int k=0; k<3; k++){
       // Step 8
-      l = 1; // Find node number for given xk, yk
+      l = elements[i].nodes[k];
       
       // Step 9
       if (k > 1){
         for (int j=0; j<k-1; j++){
           // Step 10
-          t = 1; // Find node number for given xj, yj
+          t = elements[i].nodes[j];
           
           // Step 11
           if (l <= n){
@@ -179,7 +182,7 @@ void FiniteElement::solve(){
       if (l <= n){
         alpha[l][l] += z[i][k][k];
         beta[l] += H[i][k];
-
+        
         // alpha.at(l,l) += z[i][k][k];
         // beta.at(l) += H[i][k];
       }
