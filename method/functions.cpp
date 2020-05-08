@@ -105,7 +105,7 @@ void FiniteElement::solve(){
     //    gamma.at(l) = g(vertex[l][0], vertex[l][0]); // g def is missing
   }
   
-  // Step 2 is not necessary because vectors are already initialized to 0
+  // Step 2 is nonnnt necessary because vectors are already initialized to 0
   
   // Step 3
   for (int i=0; i<M; i++){
@@ -146,24 +146,6 @@ void FiniteElement::solve(){
       H[i][j] = -1; //
     }
   }
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
  
   // Step 5
