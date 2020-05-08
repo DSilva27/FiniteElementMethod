@@ -61,7 +61,7 @@ void FiniteElement::load_data(){
   file.close();
 
 
-  file.open("../data/nodes_v2.txt");
+  file.open("../data/nodes_new.txt");
 
   while (file >> node >> x >> y >> status){
 
@@ -234,8 +234,52 @@ void FiniteElement::solve(){
   }
   
   // Step 13
+  for (int i=K; i<N; i++ ){
+  // Step 14
+    for (int k=0; k<3; k++){
+    //Step 15
+    l = elements[i].nodes[k];
+    
+    //Step 16
+    if (k > 1){
+        for (int j=0; j<k-1; j++){
+          // Step 17
+          t = elements[i].nodes[j];
+          
+          // Step 18
+          if (l <= n){
+            if (t <= n){
+              alpha[l][t] += J[i][k][j];
+              alpha[t][l] += J[i][k][j];
+              
+              // alpha.at(l,t) += z[i][k][j];
+              // alpha.at(t,l) += z[i][k][j];
+            }
+            
+            else beta[l] -= gamma[t]*J[i][k][j];
+            // else beta.at(l) -= gamma.at(t)*z[i][k][j];
+          }
+          
+          else if (t <= n) beta[t] -= gamma[l]*J[i][k][j];
+          // else if (t <= n) beta.at(t) -= gamma.at(l)*z[i][k][j];
+        }
+      }
+    
+    // Step 19
+      if (l <= n){
+        alpha[l][l] += J[i][k][k];
+        beta[l] += I[i][k];
+        
+        // alpha.at(l,l) += z[i][k][k];
+        // beta.at(l) += H[i][k];
+      }
+    }
+  }
   
+  // Step 20
+  // Solve linear system
   
-  
+  // Step 21
+  // Return gamma and N_coef
   
 }
