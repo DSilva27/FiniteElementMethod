@@ -99,13 +99,13 @@ void FiniteElement::solve(){
   
   
   // Step 1
-  for (int l=n+1; l<m; l++){
+  for (int l=n; l<m; l++){
     gamma[l] = 1; //g(elements[l].vertices[0], vertex[l][0]); // g def is missing
 
     //    gamma.at(l) = g(vertex[l][0], vertex[l][0]); // g def is missing
   }
   
-  // Step 2 is nonnnt necessary because vectors are already initialized to 0
+  // Step 2 is not necessary because vectors are already initialized to 0
   
   // Step 3
   for (int i=0; i<M; i++){
@@ -149,7 +149,7 @@ void FiniteElement::solve(){
 
  
   // Step 5
-  for (int i=K+1; i<N; i++){
+  for (int i=K; i<N; i++){
     for (int j=0; j<3; j++){
       for (int k=0; k<M; k++){
 
@@ -198,17 +198,17 @@ void FiniteElement::solve(){
       l = elements[i].nodes[k];
       
       // Step 9
-      if (k > 1){
+      if (k > 0){
         for (int j=0; j<k-1; j++){
           // Step 10
           t = elements[i].nodes[j];
           
           // Step 11
-          if (l <= n){
-            if (t <= n){
+          if (l < n){
+            if (t < n){
               alpha[l][t] += z[i][k][j];
               alpha[t][l] += z[i][k][j];
-
+              
               // alpha.at(l,t) += z[i][k][j];
               // alpha.at(t,l) += z[i][k][j];
             }
@@ -217,13 +217,13 @@ void FiniteElement::solve(){
             // else beta.at(l) -= gamma.at(t)*z[i][k][j];
           }
           
-          else if (t <= n) beta[t] -= gamma[l]*z[i][k][j];
+          else if (t < n) beta[t] -= gamma[l]*z[i][k][j];
           // else if (t <= n) beta.at(t) -= gamma.at(l)*z[i][k][j];
         }
       }
       
       // Step 12
-      if (l <= n){
+      if (l < n){
         alpha[l][l] += z[i][k][k];
         beta[l] += H[i][k];
         
@@ -237,18 +237,18 @@ void FiniteElement::solve(){
   for (int i=K; i<N; i++ ){
   // Step 14
     for (int k=0; k<3; k++){
-    //Step 15
-    l = elements[i].nodes[k];
-    
-    //Step 16
-    if (k > 1){
+      //Step 15
+      l = elements[i].nodes[k];
+      
+      //Step 16
+      if (k > 0){
         for (int j=0; j<k-1; j++){
           // Step 17
           t = elements[i].nodes[j];
           
           // Step 18
-          if (l <= n){
-            if (t <= n){
+          if (l < n){
+            if (t < n){
               alpha[l][t] += J[i][k][j];
               alpha[t][l] += J[i][k][j];
               
@@ -260,19 +260,19 @@ void FiniteElement::solve(){
             // else beta.at(l) -= gamma.at(t)*z[i][k][j];
           }
           
-          else if (t <= n) beta[t] -= gamma[l]*J[i][k][j];
+          else if (t < n) beta[t] -= gamma[l]*J[i][k][j];
           // else if (t <= n) beta.at(t) -= gamma.at(l)*z[i][k][j];
         }
       }
-    
-    // Step 19
-      if (l <= n){
-        alpha[l][l] += J[i][k][k];
-        beta[l] += I[i][k];
-        
-        // alpha.at(l,l) += z[i][k][k];
-        // beta.at(l) += H[i][k];
-      }
+      
+      // Step 19
+        if (l < n){
+          alpha[l][l] += J[i][k][k];
+          beta[l] += I[i][k];
+          
+          // alpha.at(l,l) += z[i][k][k];
+          // beta.at(l) += H[i][k];
+        }
     }
   }
   
