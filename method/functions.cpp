@@ -133,9 +133,9 @@ void FiniteElement::solve(){
     for (int j=0; j<3; j++){
       for (int k=0; k<3; k++){
     
-        integral_p = 1; //DblInt( p, elements[i].vertices[0][0], elements[i].vertices[1][0], elements[i].vertices[2][0], 1000, 1000 )
-        integral_q = 1; //DblInt( q, elements[i].vertices[0][0], elements[i].vertices[1][0], elements[i].vertices[2][0], 1000, 1000 )
-        integral_r = 1; //DblInt( vfunc(r, N_ij, N_ik), elements[i].vertices[0][0], \
+        integral_p = 1; //DblInt.DoubleIntegral( p, elements[i].vertices[0][0], elements[i].vertices[1][0], elements[i].vertices[2][0], 1000, 1000 )
+        integral_q = 1; //DblInt.DoubleIntegral( q, elements[i].vertices[0][0], elements[i].vertices[1][0], elements[i].vertices[2][0], 1000, 1000 )
+        integral_r = 1; //DblInt.DoubleIntegral( vfunc(r, N_ij, N_ik), elements[i].vertices[0][0], \
                         elements[i].vertices[1][0], elements[i].vertices[2][0], 1000, 1000 )
       
         z[i][j][k] = N_coef[i][1][j]*N_coef[i][1][k]*integral_p \
@@ -152,11 +152,41 @@ void FiniteElement::solve(){
   for (int i=K+1; i<N; i++){
     for (int j=0; j<3; j++){
       for (int k=0; k<M; k++){
-      
-        J[i][j][k] = 1; // 
+
+        /*
+          double Int = 0;
+          for (int l = 0; l < n; l++){
+          if (l == 0){
+          Int += LInt.LineIntegral( vfunc( g1, Nij, Nik), Nodes[n][0][0], Nodes[l][0][0] );
+          }
+          else if(l == n-1){
+          Int += LInt.LineIntegral( vfunc( g1, Nij, Nik), Nodes[l][0][0], Nodes[m-1][0][0] );
+          }
+
+          else{
+          Int += LInt.LineIntegral( vfunc( g1, Nij, Nik), Nodes[l+1][0][0], Nodes[l][0][0] );
+          }
+          }
+        */
+        J[i][j][k] = 1; // Int;
       }
-    
-      I[i][j] = 1; //
+      /*
+        double Int = 0;
+        for (int l = 0; l < n; l++){
+        if (l == 0){
+        Int += LInt.LineIntegral( vfunc( g1, Nij, Nik), Nodes[n][0][0], Nodes[l][0][0] );
+        }
+        else if(l == n-1){
+        Int += LInt.LineIntegral( vfunc( g1, Nij, Nik), Nodes[l][0][0], Nodes[m-1][0][0] );
+        }
+
+        else{
+        Int += LInt.LineIntegral( vfunc( g1, Nij, Nik), Nodes[l+1][0][0], Nodes[l][0][0] );
+        }
+        }
+      */
+
+      I[i][j] = 1; // Int;
     }
   }
   
