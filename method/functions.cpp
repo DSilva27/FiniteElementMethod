@@ -174,14 +174,14 @@ void FiniteElement::solve(){
         double Int = 0;
         for (int l = 0; l < n; l++){
         if (l == 0){
-        Int += LInt.LineIntegral( vfunc( g1, Nij, Nik), Nodes[n][0][0], Nodes[l][0][0] );
+        Int += LInt.LineIntegral( vfunc( g2, Nij ), Nodes[n][0][0], Nodes[l][0][0] );
         }
         else if(l == n-1){
-        Int += LInt.LineIntegral( vfunc( g1, Nij, Nik), Nodes[l][0][0], Nodes[m-1][0][0] );
+        Int += LInt.LineIntegral( vfunc( g2, Nij ), Nodes[l][0][0], Nodes[m-1][0][0] );
         }
 
         else{
-        Int += LInt.LineIntegral( vfunc( g1, Nij, Nik), Nodes[l+1][0][0], Nodes[l][0][0] );
+        Int += LInt.LineIntegral( vfunc( g2, Nij ), Nodes[l+1][0][0], Nodes[l][0][0] );
         }
         }
       */
