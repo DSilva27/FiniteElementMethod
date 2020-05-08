@@ -27,7 +27,7 @@ void FiniteElement::load_data(){
   
   int count = 1; // To know in which triangle we are at
   int number, node, bound;
-  double x, y;
+  double x, y, status;
   
   K = 2;
   N = 6;
@@ -59,6 +59,17 @@ void FiniteElement::load_data(){
   }
   
   file.close();
+
+
+  file.open("../data/nodes_v2.txt");
+
+  while (file >> node >> x >> y >> status){
+
+    //Fills the nodes variable with information about each node
+    nodes[node].push_back({x, y, status});
+  }
+
+  file.close();
 }
 
 
@@ -89,7 +100,8 @@ void FiniteElement::solve(){
   
   // Step 1
   for (int l=n+1; l<m; l++){
-    gamma[l] = g(elements[l].vertices[0], vertex[l][0]); // g def is missing
+    gamma[l] = 1; //g(elements[l].vertices[0], vertex[l][0]); // g def is missing
+
     //    gamma.at(l) = g(vertex[l][0], vertex[l][0]); // g def is missing
   }
   
@@ -97,23 +109,23 @@ void FiniteElement::solve(){
   
   // Step 3
   for (int i=0; i<M; i++){
-    det = 1; // det function is missing
+    det = 1; // det function is in LinAlg LinAlg.det(matrix)
     
     // Coefficients of the function N(x, y)
-    N_coef[i][0][0] = (element[i].vertices[1][0]*element[i].vertices[2][1]\
-                       - element[i].vertices[1][1]*element[i].vertices[2][0])/det;
-    N_coef[i][0][1] = (element[i].vertices[2][0]*element[i].vertices[0][1]\
-                       - element[i].vertices[2][1]*element[i].vertices[0][0])/det;
-    N_coef[i][0][2] = (element[i].vertices[0][0]*element[i].vertices[1][1]\
-                       - element[i].vertices[0][1]*element[i].vertices[1][0])/det;
+    N_coef[i][0][0] = (elements[i].vertices[1][0]*elements[i].vertices[2][1]\
+                       - elements[i].vertices[1][1]*elements[i].vertices[2][0])/det;
+    N_coef[i][0][1] = (elements[i].vertices[2][0]*elements[i].vertices[0][1]\
+                       - elements[i].vertices[2][1]*elements[i].vertices[0][0])/det;
+    N_coef[i][0][2] = (elements[i].vertices[0][0]*elements[i].vertices[1][1]\
+                       - elements[i].vertices[0][1]*elements[i].vertices[1][0])/det;
     
-    N_coef[i][1][0] = (element[i].vertices[1][1] - element[i].vertices[2][1])/det;
-    N_coef[i][1][1] = (element[i].vertices[2][1] - element[i].vertices[0][1])/det;
-    N_coef[i][1][2] = (element[i].vertices[0][1] - element[i].vertices[1][1])/det;
+    N_coef[i][1][0] = (elements[i].vertices[1][1] - elements[i].vertices[2][1])/det;
+    N_coef[i][1][1] = (elements[i].vertices[2][1] - elements[i].vertices[0][1])/det;
+    N_coef[i][1][2] = (elements[i].vertices[0][1] - elements[i].vertices[1][1])/det;
     
-    N_coef[i][2][0] = (element[i].vertices[2][0] - element[i].vertices[1][0])/det;
-    N_coef[i][2][1] = (element[i].vertices[0][0] - element[i].vertices[2][0])/det;
-    N_coef[i][2][2] = (element[i].vertices[1][0] - element[i].vertices[0][0])/det;
+    N_coef[i][2][0] = (elements[i].vertices[2][0] - elements[i].vertices[1][0])/det;
+    N_coef[i][2][1] = (elements[i].vertices[0][0] - elements[i].vertices[2][0])/det;
+    N_coef[i][2][2] = (elements[i].vertices[1][0] - elements[i].vertices[0][0])/det;
   }
   
   // Step 4
@@ -121,28 +133,48 @@ void FiniteElement::solve(){
     for (int j=0; j<3; j++){
       for (int k=0; k<3; k++){
     
-      integral_p = 1; //
-      integral_q = 1; //
-      integral_r = 1; //
+        integral_p = 1; //DblInt( p, elements[i].vertices[0][0], elements[i].vertices[1][0], elements[i].vertices[2][0], 1000, 1000 )
+        integral_q = 1; //DblInt( q, elements[i].vertices[0][0], elements[i].vertices[1][0], elements[i].vertices[2][0], 1000, 1000 )
+        integral_r = 1; //DblInt( vfunc(r, N_ij, N_ik), elements[i].vertices[0][0], \
+                        elements[i].vertices[1][0], elements[i].vertices[2][0], 1000, 1000 )
       
-      z[i][j][k] = N_coef[i][1][j]*N_coef[i][1][k]*integral_p \
-            + N_coef[i][2][j]*N_coef[i][2][k]*integral_q \
-            - integral_r;
+        z[i][j][k] = N_coef[i][1][j]*N_coef[i][1][k]*integral_p \
+          + N_coef[i][2][j]*N_coef[i][2][k]*integral_q          \
+          - integral_r;
       }
     
-    H[i][j] = -1; //
+      H[i][j] = -1; //
     }
   }
-  
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
   // Step 5
   for (int i=K+1; i<N; i++){
     for (int j=0; j<3; j++){
       for (int k=0; k<M; k++){
       
-        J[i][j][k] = 1; //
+        J[i][j][k] = 1; // 
       }
     
-    I[i][j] = 1; //
+      I[i][j] = 1; //
     }
   }
   

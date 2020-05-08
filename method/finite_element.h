@@ -24,4 +24,11 @@ class FiniteElement{
   int n;
   int m;
   vector <class Triangle> elements;
+  cube nodes;
+
+  //Math tools
+  
+  //TriangleIntegrator DInt;
+  //LineIntegrator LInt;
+  //Linalg LinAlg;
 };
