@@ -9,14 +9,14 @@ typedef vector< vector< double >> mat;
 using namespace std;
 
 class Triangle{
-    friend class FiniteElement;
-    
-    public:
-    Triangle(mat, vector <int>, vector <int>);
-    ~Triangle();
-    
-    //private:
-    mat vertices;
-    vector <int> nodes;
-    vector <int> boundary;
+  friend class FiniteElement;
+  
+  public:
+  Triangle(mat, vector <int>, vector <int>);
+  ~Triangle();
+  
+  //private:
+  mat vertices;
+  vector <int> nodes;
+  vector <int> boundary;
 };
