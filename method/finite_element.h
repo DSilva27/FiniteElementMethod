@@ -42,7 +42,7 @@ class FiniteElement{
   int n;
   int m;
   vector <class Triangle> elements;
-  cube nodes;
+  mat nodes;
 
   //Math tools
   
