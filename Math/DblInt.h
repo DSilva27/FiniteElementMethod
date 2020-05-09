@@ -7,7 +7,8 @@
 using namespace std;
 
 typedef double (*func)(double, double);
-typedef vector< func > vfunc;
+typedef vector < double > vec;
+typedef vector< vec > mat;
 
 class TriangleIntegrator{
 
@@ -15,21 +16,29 @@ class TriangleIntegrator{
   TriangleIntegrator();
 
   //Calculates the Jacobian for the transformation from a triangle to a square
-  double dJ( double, double, double *, double *, double *);
+  double dJ( double, double, mat);
 
   //Transforms from the square coordinates to the original cartesian coordinates
   double Transf( double, double, double, double, double );
 
   //Evaluates the transformed integrand
-  double TransfIntegrand(vfunc, double, double, double *, double *, double * );
+
+  double TransfIntegrand(func, mat, double, double );
+
+  double TransfIntegrand(func, vec, mat, double, double );
+
+  double TransfIntegrand(func, vec, vec, mat, double, double );
 
   //If there is just one function
-  double TransfIntegrand(func, double, double, double *, double *, double * );
+
 
   //Calculates the double integral from certain integrand in a triangle defined by three vertices
-  double DoubleIntegral( vfunc, double *, double *, double *, double, double );
 
-  double DoubleIntegral( func, double *, double *, double *, double, double );
+  double DoubleIntegral( func, mat, double, double );
+
+  double DoubleIntegral( func, vec, mat, double, double );
+
+  double DoubleIntegral( func, vec, vec, mat, double, double );
 };
 
 #endif

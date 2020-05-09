@@ -9,17 +9,15 @@ double Integrand3( double, double );
 
 int main(){
 
-  double P1[2] = {3.,1.};
-  double P2[2] = {2.,2.};
-  double P3[2] = {4.,2.};
+  mat Vert{ {3.,1.}, {2.,2.}, {4.,2.}};
+  vec N1{ 3., 3., 3.};
 
-  vfunc v { Integrand, Integrand2 };
   TriangleIntegrator TI;
   LineIntegrator LT;
 
-  cout << TI.DoubleIntegral(v, P1, P2, P3, 1000, 1000) << endl;
-  cout << TI.DoubleIntegral(Integrand3, P1, P2, P3, 1000, 1000) << endl;
-  cout << LT.LineIntegral(v, P2, P3, 1000) << endl;;
+  cout << TI.DoubleIntegral(Integrand3, Vert, 1000, 1000) << endl;
+  // cout << TI.DoubleIntegral(Integrand3, P1, P2, P3, 1000, 1000) << endl;
+  cout << LT.LineIntegral(Integrand3, N1, Vert[0], Vert[1], 1000) << endl;
   return 0;
 }
 

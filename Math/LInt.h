@@ -7,7 +7,7 @@
 using namespace std;
 
 typedef double (*func)(double, double);
-typedef vector< func > vfunc;
+typedef vector< double > vec;
 
 class LineIntegrator{
 
@@ -15,15 +15,20 @@ class LineIntegrator{
   LineIntegrator();
 
   //Calculates the Jacobian for the transformation from a variables x,y to parameter t
-  double dJ( double *, double * );
+  double dJ( vec, vec );
 
   //Calculates x(t) and y(t). The parameters are: t, c1, c2. Where c is either x or y
   double Transf( double, double, double );
 
   //Evaluates the integrand given t and the endpoints
-  double TransfIntegrand(double, vfunc, double *, double *);
+  double TransfIntegrand(func, vec, vec, vec, double);
+
+  double TransfIntegrand(func, vec, vec, vec, vec, double);
+
   //Calculates the line integral using the Composite Simpson's Rule
-  double LineIntegral( vfunc, double *, double *, double );
+  double LineIntegral( func, vec, vec, vec, int);
+
+  double LineIntegral( func, vec, vec, vec, vec, int);
 
 };
 
