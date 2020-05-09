@@ -3,6 +3,10 @@
 #include <fstream>
 #include "triangle.h" //??
 #include "finite_element.h"
+#include "Math/DblInt.h"
+#include "Math/LInt.h"
+#include "Math/LinAlg.h"
+
 //#include <Armadillo>
 
 using namespace std;
@@ -10,6 +14,7 @@ using namespace std;
 
 FiniteElement::FiniteElement(){
   cout << "Bienvenido" << endl;
+
 }
 
 
@@ -73,7 +78,7 @@ void FiniteElement::load_data(){
 }
 
 
-void FiniteElement::solve(){
+void FiniteElement::solve( vfunc VF){
   
   // vector <double> gamma(m);
   // vector <double> beta(n);
@@ -100,7 +105,7 @@ void FiniteElement::solve(){
   
   // Step 1
   for (int l=n; l<m; l++){
-    gamma[l] = 1; //g(elements[l].vertices[0], vertex[l][0]); // g def is missing
+    gamma[l] = 4;//VF[4](elements[l].vertices[0], vertex[l][0]); // g def is missing
 
     //    gamma.at(l) = g(vertex[l][0], vertex[l][0]); // g def is missing
   }
@@ -114,8 +119,10 @@ void FiniteElement::solve(){
     // Coefficients of the function N(x, y)
     N_coef[i][0][0] = (elements[i].vertices[1][0]*elements[i].vertices[2][1]\
                        - elements[i].vertices[1][1]*elements[i].vertices[2][0])/det;
+
     N_coef[i][0][1] = (elements[i].vertices[2][0]*elements[i].vertices[0][1]\
                        - elements[i].vertices[2][1]*elements[i].vertices[0][0])/det;
+
     N_coef[i][0][2] = (elements[i].vertices[0][0]*elements[i].vertices[1][1]\
                        - elements[i].vertices[0][1]*elements[i].vertices[1][0])/det;
     
@@ -133,17 +140,16 @@ void FiniteElement::solve(){
     for (int j=0; j<3; j++){
       for (int k=0; k<3; k++){
     
-        integral_p = 1; //DblInt.DoubleIntegral( p, elements[i].vertices[0][0], elements[i].vertices[1][0], elements[i].vertices[2][0], 1000, 1000 )
-        integral_q = 1; //DblInt.DoubleIntegral( q, elements[i].vertices[0][0], elements[i].vertices[1][0], elements[i].vertices[2][0], 1000, 1000 )
-        integral_r = 1; //DblInt.DoubleIntegral( vfunc(r, N_ij, N_ik), elements[i].vertices[0][0], \
-                        elements[i].vertices[1][0], elements[i].vertices[2][0], 1000, 1000 )
+        integral_p = DInt.DoubleIntegral( VF[0], elements[i].vertices, 1000, 1000 );
+        integral_q = DInt.DoubleIntegral( VF[1], elements[i].vertices, 1000, 1000 );
+        integral_r = DInt.DoubleIntegral( VF[2], N_coef[i][j], N_coef[i][k], elements[i].vertices, 1000, 1000 );
       
         z[i][j][k] = N_coef[i][1][j]*N_coef[i][1][k]*integral_p \
           + N_coef[i][2][j]*N_coef[i][2][k]*integral_q          \
           - integral_r;
       }
     
-      H[i][j] = -1; //
+      H[i][j] = -DInt.DoubleIntegral( VF[3], N_coef[i][j], elements[i].vertices, 1000, 1000 ); //
     }
   }
 
