@@ -1,4 +1,4 @@
-#include "LinAlg.h"
+#include "Math/LinAlg.h"
 
 Linalg::Linalg(void){}
 

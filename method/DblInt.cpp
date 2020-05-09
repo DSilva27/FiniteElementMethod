@@ -1,7 +1,7 @@
 //Here we use the fact that an integral over any triangle can be transformed easily into an integral over a square (0,1)x(0,1)
 //When we are integrating over the triangle the variables are x,y
 //When we are integrating over the square the variables are u, v
-#include "DblInt.h"
+#include "Math/DblInt.h"
 
 TriangleIntegrator::TriangleIntegrator(void){}
 

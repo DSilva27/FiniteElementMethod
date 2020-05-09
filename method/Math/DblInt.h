@@ -1,5 +1,5 @@
 #ifndef DBLINT_H
-#define DBLLINT_H
+#define DBLINT_H
 
 #include <cmath>
 #include <vector>

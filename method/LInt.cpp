@@ -1,4 +1,4 @@
-#include "LInt.h"
+#include "Math/LInt.h"
 
 /*
  Here we apply the fact that the variables of a line integral can be parametrized in terms of a parameter t.
