@@ -27,31 +27,30 @@ void FiniteElement::load_data(){
   
   mat vertices_vec;
   vector <int> nodes_vec;
-  vector <int> boundary_vec;
   ifstream file;
   
   int count = 1; // To know in which triangle we are at
-  int number, node, bound;
-  double x, y, status;
+  int number, node;
+  double x, y;
   
   K = 2;
   N = 6;
   M = 10;
   n = 5;
   m = 11;
+  p = 4;
   
   file.open("../data/data_triangles.txt");
   
-  while (file >> number >> node >> x >> y >> bound){
+  while (file >> number >> node >> x >> y){
     
     if ( number != count ){
       // When no more data about that triangle, push back element and increase count
-      Triangle triangle(vertices_vec, nodes_vec, boundary_vec);
+      Triangle triangle(vertices_vec, nodes_vec);
       elements.push_back(triangle);
       
       vertices_vec.clear();
       nodes_vec.clear();
-      boundary_vec.clear();
       
       count += 1;
     }
@@ -59,7 +58,6 @@ void FiniteElement::load_data(){
     // Fill vectors with data
     vertices_vec.push_back({x, y});
     nodes_vec.push_back(node);
-    boundary_vec.push_back(bound);
     
   }
   
@@ -68,10 +66,10 @@ void FiniteElement::load_data(){
   
   file.open("../data/nodes_new.txt");
   
-  while (file >> node >> x >> y >> status){
+  while (file >> node >> x >> y){
   
     //Fills nodes vector with information about each node
-    nodes.push_back({x, y, status});
+    nodes.push_back({x, y});
   }
   
   file.close();
@@ -157,28 +155,28 @@ void FiniteElement::solve( vfunc VF){
       H[i][j] = -DInt.DoubleIntegral( VF[3], N_coef[i][j], elements[i].vertices, 1000, 1000 ); //
     }
   }
-
- 
+  
+  
   // Step 5
   for (int i=K; i<N; i++){
     for (int j=0; j<3; j++){
       for (int k=0; k<M; k++){
-
+        
         double Int = 0;
-
-        for (int l = 0; l < p; l++){
-
+        
+        for (int l=0; l<p; l++){
+          
           if (l == 0){
-
-            Int += LInt.LineIntegral( VF[5], N_coef[i][j], N_coef[i][k], nodes[n], nodes[l]);
+            
+            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[n], nodes[l]);
           }
-
+          
           else if(l == p-1){
-            Int += LInt.LineIntegral( VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[m-1] );
+            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[m-1] );
           }
-
+          
           else{
-            Int += LInt.LineIntegral( VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[l+1] );
+            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[l+1] );
           }
         }
         
@@ -186,26 +184,22 @@ void FiniteElement::solve( vfunc VF){
       }
      
       double Int = 0;
-
+      
       for (int l = 0; l < n; l++){
-
         if (l == 0){
-
           Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[n], nodes[l]);
         }
-
+        
         else if(l == n-1){
-
           Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[m-1]);
         }
-
+        
         else{
-
           Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[l+1]);
         }
       }
-     
-
+      
+      
       I[i][j] = Int;
     }
   }

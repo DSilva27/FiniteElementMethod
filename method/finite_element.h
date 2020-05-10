@@ -41,6 +41,7 @@ class FiniteElement{
   int M;
   int n;
   int m;
+  int p;
   vector <class Triangle> elements;
   mat nodes;
 
