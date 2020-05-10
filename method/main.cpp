@@ -48,5 +48,5 @@ double F(double x, double y){ return 0; }
 
 double G(double x, double y){ return 4; }
 
-double G1(double x, double y){ return 4; }
-double G2(double x, double y){ return 4; }
+double G1(double x, double y){ return 0; }
+double G2(double x, double y){ return (x + y)/2; }
