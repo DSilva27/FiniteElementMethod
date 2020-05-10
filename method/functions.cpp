@@ -102,7 +102,7 @@ void FiniteElement::solve( vfunc VF){
   
   // Step 1
   for (int l=n; l<m; l++){
-    gamma[l] = VF[4](nodes[l][0], nodes[l][1]); // g def is missing
+    gamma[l] = VF[4](nodes[l][0], nodes[l][1]);
 
     //    gamma.at(l) = g(vertex[l][0], vertex[l][0]); // g def is missing
   }
@@ -119,6 +119,7 @@ void FiniteElement::solve( vfunc VF){
     det = LinAlg.Det33(Matrix); 
     
     // Coefficients of the function N(x, y)
+    // N[i][a,b,c][1,2,3]
     N_coef[i][0][0] = (elements[i].vertices[1][0]*elements[i].vertices[2][1]\
                        - elements[i].vertices[1][1]*elements[i].vertices[2][0])/det;
 
@@ -140,40 +141,40 @@ void FiniteElement::solve( vfunc VF){
   // Step 4
   for (int i=0; i<M; i++){
     for (int j=0; j<3; j++){
-      for (int k=0; k<3; k++){
+      for (int k=0; k<=j; k++){
         
-        integral_p = DInt.DoubleIntegral( VF[0], elements[i].vertices, 10, 10 );
-        integral_q = DInt.DoubleIntegral( VF[1], elements[i].vertices, 10, 10 );
-        integral_r = DInt.DoubleIntegral( VF[2], N_coef[i][j], N_coef[i][k], elements[i].vertices, 10, 10 );
+        integral_p = DInt.DoubleIntegral( VF[0], elements[i].vertices, 100, 100 );
+        integral_q = DInt.DoubleIntegral( VF[1], elements[i].vertices, 100, 100 );
+        integral_r = DInt.DoubleIntegral( VF[2], N_coef[i][j], N_coef[i][k], elements[i].vertices, 100, 100 );
       
         z[i][j][k] = N_coef[i][1][j]*N_coef[i][1][k]*integral_p \
                     + N_coef[i][2][j]*N_coef[i][2][k]*integral_q          \
                     - integral_r;
       }
     
-      H[i][j] = -DInt.DoubleIntegral( VF[3], N_coef[i][j], elements[i].vertices, 10, 10 ); //
+      H[i][j] = -DInt.DoubleIntegral( VF[3], N_coef[i][j], elements[i].vertices, 100, 100 ); //
     }
   }
   
   // Step 5
   for (int i=K; i<N; i++){
     for (int j=0; j<3; j++){
-      for (int k=0; k<j; k++){
+      for (int k=0; k<=j; k++){
         
         double Int = 0;
         
         for (int l=0; l<p; l++){
           
           if (l == 0){
-            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[n], nodes[l], 10);
+            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[n], nodes[l], 100);
           }
           
           else if(l == p-1){
-            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[m-1], 10);
+            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[m-1], 100);
           }
           
           else{
-            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[l+1], 10);
+            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[l+1], 100);
           }
         }
         
@@ -184,19 +185,17 @@ void FiniteElement::solve( vfunc VF){
       
       for (int l = 0; l < n; l++){
         if (l == 0){
-          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[n], nodes[l], 10);
+          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[n], nodes[l], 100);
         }
         
         else if(l == n-1){
-          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[m-1], 10);
+          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[m-1], 100);
         }
         
         else{
-          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[l+1], 10);
+          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[l+1], 100);
         }
       }
-      
-      cout << "h" << endl;
       
       I[i-K][j] = Int;
     }
@@ -287,6 +286,21 @@ void FiniteElement::solve( vfunc VF){
         }
     }
   }
+  
+  for(int i=0; i<n; i++){
+    for(int j=0; j<n; j++){
+    cout << alpha[i][j] << " ";
+    
+    }
+  
+  cout << endl;
+  }
+  
+  
+  for(int j=0; j<n; j++){
+    cout << beta[j] << " ";
+    
+    }
   
   // Step 20
   // Solve linear system
