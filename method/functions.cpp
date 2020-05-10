@@ -88,8 +88,8 @@ void FiniteElement::solve( vfunc VF){
   
   cube N_coef(M, mat(3, vec(3)));
   cube z(M, mat(3, vec(3)));
-  cube J((N-K-1), mat(3, vec(3)));
-  mat I((N-K-1), vec(3));
+  cube J((N-K), mat(3, vec(3)));
+  mat I((N-K), vec(3));
   mat H(M, vec (3));
   
   double det;
@@ -158,9 +158,7 @@ void FiniteElement::solve( vfunc VF){
   // Step 5
   for (int i=K; i<N; i++){
     for (int j=0; j<3; j++){
-      for (int k=0; k<M; k++){
-        
-        cout << "hola" << endl;
+      for (int k=0; k<j; k++){
         
         double Int = 0;
         
@@ -179,7 +177,7 @@ void FiniteElement::solve( vfunc VF){
           }
         }
         
-        J[i][j][k] = Int;
+        J[i-K][j][k] = Int;
       }
      
       double Int = 0;
@@ -198,7 +196,9 @@ void FiniteElement::solve( vfunc VF){
         }
       }
       
-      I[i][j] = Int;
+      cout << "h" << endl;
+      
+      I[i-K][j] = Int;
     }
   }
   
@@ -261,26 +261,26 @@ void FiniteElement::solve( vfunc VF){
           // Step 18
           if (l < n){
             if (t < n){
-              alpha[l][t] += J[i][k][j];
-              alpha[t][l] += J[i][k][j];
+              alpha[l][t] += J[i-K][k][j];
+              alpha[t][l] += J[i-K][k][j];
               
               // alpha.at(l,t) += z[i][k][j];
               // alpha.at(t,l) += z[i][k][j];
             }
             
-            else beta[l] -= gamma[t]*J[i][k][j];
+            else beta[l] -= gamma[t]*J[i-K][k][j];
             // else beta.at(l) -= gamma.at(t)*z[i][k][j];
           }
           
-          else if (t < n) beta[t] -= gamma[l]*J[i][k][j];
+          else if (t < n) beta[t] -= gamma[l]*J[i-K][k][j];
           // else if (t <= n) beta.at(t) -= gamma.at(l)*z[i][k][j];
         }
       }
       
       // Step 19
         if (l < n){
-          alpha[l][l] += J[i][k][k];
-          beta[l] += I[i][k];
+          alpha[l][l] += J[i-K][k][k];
+          beta[l] += I[i-K][k];
           
           // alpha.at(l,l) += z[i][k][k];
           // beta.at(l) += H[i][k];
