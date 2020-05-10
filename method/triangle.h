@@ -13,13 +13,12 @@ class Triangle{
   friend class FiniteElement;
   
   public:
-  Triangle(mat, vector <int>, vector <int>);
+  Triangle(mat, vector <int>);
   ~Triangle();
   
-  //private:
+  private:
   mat vertices;
   vector <int> nodes;
-  vector <int> boundary;
 };
 
 #endif

@@ -6,13 +6,11 @@ using namespace std;
 
 
 Triangle::Triangle(mat vert,
-                   vector <int> nod,
-                   vector <int> bound){
+                   vector <int> nod){
   cout << "Bienvenido" << endl;
   
   vertices = vert;
   nodes = nod;
-  boundary = bound;
 }
 
 

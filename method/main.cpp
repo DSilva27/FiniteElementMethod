@@ -34,7 +34,9 @@ int main(){
     //cout << ex.elements[i].boundary[2] << endl;
     
   }*/
- 
+  
+  ex.solve( VFUNC );
+  
   return 0;
 }
 
@@ -67,4 +69,6 @@ double G2(double x, double y){
 
     return y;
   }
+  
+  return 0;
 }

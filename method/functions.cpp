@@ -168,15 +168,15 @@ void FiniteElement::solve( vfunc VF){
           
           if (l == 0){
             
-            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[n], nodes[l]);
+            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[n], nodes[l], 1000);
           }
           
           else if(l == p-1){
-            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[m-1] );
+            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[m-1], 1000);
           }
           
           else{
-            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[l+1] );
+            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[l+1], 1000);
           }
         }
         
@@ -187,18 +187,17 @@ void FiniteElement::solve( vfunc VF){
       
       for (int l = 0; l < n; l++){
         if (l == 0){
-          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[n], nodes[l]);
+          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[n], nodes[l], 1000);
         }
         
         else if(l == n-1){
-          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[m-1]);
+          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[m-1], 1000);
         }
         
         else{
-          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[l+1]);
+          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[l+1], 1000);
         }
       }
-      
       
       I[i][j] = Int;
     }
