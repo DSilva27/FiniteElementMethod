@@ -164,40 +164,49 @@ void FiniteElement::solve( vfunc VF){
     for (int j=0; j<3; j++){
       for (int k=0; k<M; k++){
 
-        /*
-          double Int = 0;
-          for (int l = 0; l < n; l++){
+        double Int = 0;
+
+        for (int l = 0; l < p; l++){
+
           if (l == 0){
-          Int += LInt.LineIntegral( vfunc( g1, Nij, Nik), Nodes[n][0][0], Nodes[l][0][0] );
+
+            Int += LInt.LineIntegral( VF[5], N_coef[i][j], N_coef[i][k], nodes[n], nodes[l]);
           }
-          else if(l == n-1){
-          Int += LInt.LineIntegral( vfunc( g1, Nij, Nik), Nodes[l][0][0], Nodes[m-1][0][0] );
+
+          else if(l == p-1){
+            Int += LInt.LineIntegral( VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[m-1] );
           }
 
           else{
-          Int += LInt.LineIntegral( vfunc( g1, Nij, Nik), Nodes[l+1][0][0], Nodes[l][0][0] );
+            Int += LInt.LineIntegral( VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[l+1] );
           }
-          }
-        */
-        J[i][j][k] = 1; // Int;
-      }
-      /*
-        double Int = 0;
-        for (int l = 0; l < n; l++){
-        if (l == 0){
-        Int += LInt.LineIntegral( vfunc( g2, Nij ), Nodes[n][0][0], Nodes[l][0][0] );
         }
+        
+        J[i][j][k] = Int;
+      }
+     
+      double Int = 0;
+
+      for (int l = 0; l < n; l++){
+
+        if (l == 0){
+
+          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[n], nodes[l]);
+        }
+
         else if(l == n-1){
-        Int += LInt.LineIntegral( vfunc( g2, Nij ), Nodes[l][0][0], Nodes[m-1][0][0] );
+
+          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[m-1]);
         }
 
         else{
-        Int += LInt.LineIntegral( vfunc( g2, Nij ), Nodes[l+1][0][0], Nodes[l][0][0] );
-        }
-        }
-      */
 
-      I[i][j] = 1; // Int;
+          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[l+1]);
+        }
+      }
+     
+
+      I[i][j] = Int;
     }
   }
   
