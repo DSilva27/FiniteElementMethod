@@ -105,7 +105,7 @@ void FiniteElement::solve( vfunc VF){
   
   // Step 1
   for (int l=n; l<m; l++){
-    gamma[l] = 4;//VF[4](nodes[l][0], nodes[l][1]); // g def is missing
+    gamma[l] = VF[4](nodes[l][0], nodes[l][1]); // g def is missing
 
     //    gamma.at(l) = g(vertex[l][0], vertex[l][0]); // g def is missing
   }
@@ -114,7 +114,12 @@ void FiniteElement::solve( vfunc VF){
   
   // Step 3
   for (int i=0; i<M; i++){
-    det = 1; // det function is in LinAlg LinAlg.det(matrix)
+
+    mat Matrix{ {1, elements[i].vertices[0][1], elements[i].vertices[0][2]},
+                {1, elements[i].vertices[1][1], elements[i].vertices[1][2]},
+                {1, elements[i].vertices[2][1], elements[i].vertices[2][2]} };
+
+    det = LinAlg.Det33(Matrix); 
     
     // Coefficients of the function N(x, y)
     N_coef[i][0][0] = (elements[i].vertices[1][0]*elements[i].vertices[2][1]\
