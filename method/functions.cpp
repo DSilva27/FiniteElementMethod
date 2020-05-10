@@ -64,16 +64,16 @@ void FiniteElement::load_data(){
   }
   
   file.close();
-
-
+  
+  
   file.open("../data/nodes_new.txt");
-
+  
   while (file >> node >> x >> y >> status){
-
-    //Fills the nodes variable with information about each node
-    nodes[node].push_back({x, y, status});
+  
+    //Fills nodes vector with information about each node
+    nodes.push_back({x, y, status});
   }
-
+  
   file.close();
 }
 
@@ -105,7 +105,7 @@ void FiniteElement::solve( vfunc VF){
   
   // Step 1
   for (int l=n; l<m; l++){
-    gamma[l] = 4;//VF[4](elements[l].vertices[0], vertex[l][0]); // g def is missing
+    gamma[l] = 4;//VF[4](nodes[l][0], nodes[l][1]); // g def is missing
 
     //    gamma.at(l) = g(vertex[l][0], vertex[l][0]); // g def is missing
   }
