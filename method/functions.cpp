@@ -100,6 +100,15 @@ void FiniteElement::solve( vfunc VF){
   
   int l, t;
   
+  ofstream gamma_file( "../data/gamma_results.txt", ios::out );
+  ofstream N_coef_file( "../data/N_coef_results.txt", ios::out );
+  
+  if ( !gamma_file or !N_coef_file) 
+    {
+      cout << "No se pudo abrir el archivo de resultados" << endl;
+      exit( 1 );
+    }
+  
   // Step 1
   for (int l=n; l<m; l++){
     gamma[l] = VF[4](nodes[l][0], nodes[l][1]);
@@ -289,26 +298,29 @@ void FiniteElement::solve( vfunc VF){
         }
     }
   }
-  
-  for(int i=0; i<n; i++){
-    for(int j=0; j<n; j++){
-    cout << alpha[i][j] << " ";
-    }
-  cout << endl;
-  }
-  
-  
-  for(int j=0; j<n; j++){
-    cout << beta[j] << " ";
-    
-    }
-  cout << endl;
-  
-  
   // Step 20
   LinAlg.SOR(alpha, beta, gamma, 1.25, 0.03, 20);
   
   // Step 21
-  // Return gamma and N_coef
+  for (int i=0; i<m; i++){
+    gamma_file << gamma[i] << " ";
+    }
+  gamma_file << endl;
+  
+  gamma_file.close();
+  
+  
+  for (int i=0; i<M; i++){
+    for (int j=0; j<3; j++){
+      N_coef_file << i;
+      for (int k=0; k<3; k++){
+        N_coef_file << " " << N_coef[i][k][j];
+      }
+      
+      N_coef_file << endl;
+    }
+  }
+  
+  N_coef_file.close();
   
 }
