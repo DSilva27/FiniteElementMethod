@@ -3,9 +3,9 @@
 #include <fstream>
 #include "triangle.h"
 #include "finite_element.h"
-#include "Math/DblInt.h"
-#include "Math/LInt.h"
-#include "Math/LinAlg.h"
+#include "DblInt.h"
+#include "LInt.h"
+#include "LinAlg.h"
 
 using namespace std;
 
@@ -87,6 +87,7 @@ void FiniteElement::solve( vfunc VF){
   double det;
   double integral_p, integral_q, integral_r;
   
+  int step = 200;
   int l, t;
   
   ofstream gamma_file( "../data/gamma_results.txt", ios::out );
@@ -139,16 +140,16 @@ void FiniteElement::solve( vfunc VF){
     for (int j=0; j<3; j++){
       for (int k=0; k<=j; k++){
         
-        integral_p = DInt.DoubleIntegral( VF[0], elements[i].vertices, 100, 100 );
-        integral_q = DInt.DoubleIntegral( VF[1], elements[i].vertices, 100, 100 );
-        integral_r = DInt.DoubleIntegral( VF[2], N_coef[i][j], N_coef[i][k], elements[i].vertices, 100, 100 );
+        integral_p = DInt.DoubleIntegral( VF[0], elements[i].vertices, step, step );
+        integral_q = DInt.DoubleIntegral( VF[1], elements[i].vertices, step, step );
+        integral_r = DInt.DoubleIntegral( VF[2], N_coef[i][j], N_coef[i][k], elements[i].vertices, step, step );
       
         z[i][j][k] = N_coef[i][1][j]*N_coef[i][1][k]*integral_p \
                     + N_coef[i][2][j]*N_coef[i][2][k]*integral_q \
                     - integral_r;
       }
       
-      H[i][j] = -DInt.DoubleIntegral( VF[3], N_coef[i][j], elements[i].vertices, 100, 100 ); //
+      H[i][j] = -DInt.DoubleIntegral( VF[3], N_coef[i][j], elements[i].vertices, step, step ); //
     }
   }
   
@@ -162,15 +163,15 @@ void FiniteElement::solve( vfunc VF){
         for (int l=0; l<p; l++){
           
           if (l == 0){
-            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[n], nodes[l], 100);
+            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[n], nodes[l], step);
           }
           
           else if(l == p-1){
-            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[m-1], 100);
+            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[m-1], step);
           }
           
           else{
-            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[l+1], 100);
+            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[l+1], step);
           }
         }
         
@@ -181,15 +182,15 @@ void FiniteElement::solve( vfunc VF){
       
       for (int l = 0; l < n; l++){
         if (l == 0){
-          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[n], nodes[l], 100);
+          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[n], nodes[l], step);
         }
         
         else if(l == n-1){
-          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[m-1], 100);
+          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[m-1], step);
         }
         
         else{
-          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[l+1], 100);
+          Int += LInt.LineIntegral( VF[6], N_coef[i][j], nodes[l], nodes[l+1], step);
         }
       }
       
@@ -267,7 +268,7 @@ void FiniteElement::solve( vfunc VF){
     }
   }
   // Step 20
-  LinAlg.SOR(alpha, beta, gamma, 1.25, 0.03, 20);
+  LinAlg.SOR(alpha, beta, gamma, 1.25, 0.00003, 2000);
   
   // Step 21
   // Save gamma entries to file
