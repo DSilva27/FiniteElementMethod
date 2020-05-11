@@ -29,27 +29,29 @@ Carolina Herrera Segura, David Silva Sánchez
 
 ### Instalation
 
-* Clone the [original repository](https://github.com/DavidSS0397/FiniteElementMethod.git)
-* Open your terminal where you cloned the repository
+* Clone the [original repository](https://github.com/DavidSS0397/FiniteElementMethod.git).
+* Open a terminal where you cloned the repository.
 * Now follow the following guidelines on how to use it.
 
 ### What does it do?
 
-Here we solve a partial differential equation in two dimensions with general expression:
+Here we solve a partial differential equation in two dimensions with the general expression:
 
 ![equation](https://latex.codecogs.com/gif.latex?\frac{\partial}{\partial&space;x}\left(p(x,y)\frac{\partial&space;u}{\partial&space;x}&space;\right)&space;&plus;&space;\frac{\partial}{\partial&space;y}\left(q(x,y)\frac{\partial&space;u}{\partial&space;y}&space;\right)&space;&plus;&space;r(x,y)u(x,y)&space;=&space;f(x,y))
 
-If S is the boundary of a plane surface D. If we devide the boundary S into two sub-boundaries S1 and S2. Then the function u(x,y) must have boundary contidions of the form:
+If S is the boundary of a plane surface D, we divide the boundary S into two sub-boundaries S1 and S2. Then, the function u(x,y) must have boundary conditions of the form:
 
 In S1:
 
-u(x,y) = g(x,y)
+![equation](https://latex.codecogs.com/gif.latex?u(x,y)=&space;g(x,y))
 
 In S2:
 
 ![equation](https://latex.codecogs.com/gif.latex?p(x,y)\frac{\partial&space;u}{\partial&space;x}cos(\theta_1)&plus;q(x,y)\frac{\partial&space;u}{\partial&space;y}cos(\theta_2)&space;&plus;g_1(x,y)u(x,y)&space;=&space;g_2(x,y))
 
-if Φ(x,y) is the approximated solution to u(x,y). The solution given by the algorithm has the form:
+if 
+![equation](https://latex.codecogs.com/gif.latex?\Phi(x,y)) is the approximated solution to 
+![equation](https://latex.codecogs.com/gif.latex?u(x,y)), the solution given by the algorithm has the form:
 
 ![equation](https://latex.codecogs.com/gif.latex?\Phi(x,y)&space;=&space;\sum_{k=0}^{m-1}&space;\gamma_{k}\Phi_k(x,y)&space;\quad&space;(1))
 
@@ -89,7 +91,7 @@ The NodeNumber, XNode and YNode in data_triangles.txt and nodes.txt have to coin
 
 Now everything is ready. Compile your code using ```make``` and run ```./solver```.
 
-Your results will be printed in data/results/
+Your results will be printed in data/results/ .
 
 ### gamma_results.txt
 
