@@ -39,23 +39,22 @@ void FiniteElement::load_data(){
   // Save data about each triangle to Triangle objects
   file.open("../data/data_triangles.txt");
   
-  while (file >> number >> node >> x >> y){
-    
-    if ( number != count ){
-      // When no more data about that triangle, push back element and increase count
-      Triangle triangle(vertices_vec, nodes_vec);
-      elements.push_back(triangle);
+  for (int i=0; i<M; i++){//
+  
+    for (int j=0; j<3; j++){
+      // Fill vectors with data
+      file >> number >> node >> x >> y;
       
-      vertices_vec.clear();
-      nodes_vec.clear();
-      
-      count += 1;
+      vertices_vec.push_back({x, y});
+      nodes_vec.push_back(node);
     }
-      
-    // Fill vectors with data
-    vertices_vec.push_back({x, y});
-    nodes_vec.push_back(node);
     
+    // Create Triangle object with data
+    Triangle triangle(vertices_vec, nodes_vec);
+    elements.push_back(triangle);
+    
+    vertices_vec.clear();
+    nodes_vec.clear();
   }
   
   file.close();
@@ -95,7 +94,7 @@ void FiniteElement::solve( vfunc VF){
   
   if ( !gamma_file or !N_coef_file) 
     {
-      cout << "No se pudo abrir el archivo de resultados" << endl;
+      cout << "Can't open file'" << endl;
       exit( 1 );
     }
   
@@ -148,7 +147,7 @@ void FiniteElement::solve( vfunc VF){
                     + N_coef[i][2][j]*N_coef[i][2][k]*integral_q \
                     - integral_r;
       }
-    
+      
       H[i][j] = -DInt.DoubleIntegral( VF[3], N_coef[i][j], elements[i].vertices, 100, 100 ); //
     }
   }
@@ -254,7 +253,6 @@ void FiniteElement::solve( vfunc VF){
             }
             
             else beta[l] -= gamma[t]*J[i-K][k][j];
-            
           }
           
           else if (t < n) beta[t] -= gamma[l]*J[i-K][k][j];
@@ -295,5 +293,4 @@ void FiniteElement::solve( vfunc VF){
   }
   
   N_coef_file.close();
-  
 }
