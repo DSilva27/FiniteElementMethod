@@ -1,10 +1,10 @@
 # Finite Element Method
 Parcial 3 de Física Computacional 2 - 2020
 
-### Contributors:
+## Contributors:
 Carolina Herrera Segura, David Silva Sánchez
 
-### Structure of the project
+## Structure of the project
 ```
 . FiniteElementMethod
 ├── Makefile
@@ -27,13 +27,13 @@ Carolina Herrera Segura, David Silva Sánchez
     |   └── N_coef_results.txt
 ```
 
-### Instalation
+## Installation
 
 * Clone the [original repository](https://github.com/DavidSS0397/FiniteElementMethod.git).
 * Open a terminal where you cloned the repository.
 * Now follow the following guidelines on how to use it.
 
-### What does it do?
+## What does it do?
 
 Here we solve a partial differential equation in two dimensions with the general expression:
 
@@ -63,46 +63,79 @@ And N<sup>(i)</sup><sub>j</sub> is the polynomial that describes the correspondi
 
 ![equation](https://latex.codecogs.com/gif.latex?N^{(i)}_j(x,y)&space;=&space;a^{(i)}_j&space;&plus;&space;b^{(i)}_jx&space;&plus;&space;c^{(i)}_jy&space;\quad&space;(2))
 
-When you use the code, you have to include the functions for your problem. This has to be done in src/main.cpp. Here you just have to change the definitions of each function.
+## How to use it.
 
-The Finite Element Method solves the PDF by dividing the plane of integration in triangles and solving the equation for each triangles. This algorithm doesn't divide the desired plane, this has to be done manually and the information has to be ordered according to the following rules. Templates are found in data/input .
+The code includes a test problem. To use generally, change the files 'data_triangles.txt' and 'nodes.txt' in data/input for the relevant triangle information and change the boundary conditions in src/main.cpp.
 
-* T<sub>0</sub>,...,T<sub>K-1</sub>: number of internal triangels
-* T<sub>K</sub>,...,T<sub>N-1</sub>: number of triangles with at least one edge in S2
-* T<sub>N</sub>,...,T<sub>M-1</sub>: number of triangles with at least one edge in S1
+The Finite Element Method solves the PDF by dividing the plane of integration in triangular elements and solving the equation for each triangle. The present code doesn't divide the desired plane, so the information of this division must be given in an input file ordered according to the following rules:
 
-* E<sub>0</sub>,...,E<sub>p-1</sub>: number of nodes in S2 that have no boundary with S1
-* E<sub>p</sub>,...,E<sub>n-1</sub>: number of nodes internal nodes
-* E<sub>n</sub>,...,E<sub>m-1</sub>: number of nodes in S1
+* T<sub>0</sub>,...,T<sub>K-1</sub>: number of internal triangels.
+* T<sub>K</sub>,...,T<sub>N-1</sub>: number of triangles with at least one edge in S2.
+* T<sub>N</sub>,...,T<sub>M-1</sub>: number of triangles with at least one edge in S1.
 
-Note: E<sub>i+1</sub> and E<sub>i</sub> have to be consecutive in their corresponding boundary (either S1 or S2). This is important for the line integrals implemented in the method (this doesn't apply for internal nodes).
+* E<sub>0</sub>,...,E<sub>p-1</sub>: number of nodes in S2 that have no boundary with S1.
+* E<sub>p</sub>,...,E<sub>n-1</sub>: number of internal nodes.
+* E<sub>n</sub>,...,E<sub>m-1</sub>: number of nodes in S1.
 
-Following this guidelines, here is a brief explanation of how you should fill your nodes.txt and data_triangle.txt files:
+#### Note
+E<sub>i+1</sub> and E<sub>i</sub> have to be consecutive in their corresponding boundary (either S1 or S2). This is important for the line integrals implemented in the method (this doesn't apply for internal nodes).
+
+This information has to be present in ```data/input/nodes.txt``` and ```data/input/data_triangles.txt```. Here is a brief description of the content in this files:
 
 #### nodes.txt
-```NodeNumber XNode YNode}```
+
+Has the information relating each node to its x and y coordinates.
 
 #### data_triangles.txt
-```TriangleNumber NodeNumber XNode YNode```
 
-Note: in data_triangles.txt as each triangle has three vertices, then there are three lines for the same triangles. The order in which you input the nodes in this file is not important, as this is indifferent for the double integrales. Just make sure it follows the guidelines stablished previously. 
-
-The NodeNumber, XNode and YNode in data_triangles.txt and nodes.txt have to coincide.
+Relates the vertices of each triangle with the corresponding nodes.
 
 Now everything is ready. Compile your code using ```make``` and run ```./solver```.
 
 Your results will be printed in data/results/ .
 
-### gamma_results.txt
+#### gamma_results.txt
 
-You can see the meaning of γ in Equation 1. This file has the values of each value of the gamma vector.
+You can see the meaning of gamma in Equation 1. This file has the values of each value of the gamma vector.
 
 ### N_coef_results.txt
 
-This file has the coefficients for each polynome N (see Equation 2).
+This file has the coefficients for each polynomial N(x,y) (see Equation 2).
 
+## Templates for input data
 
-### Acknowledgments
+Following this guidelines, here is a brief explanation of how you should fill your nodes.txt and data_triangle.txt files:
+
+#### nodes.txt
+```NodeNumber XNode YNode```
+
+#### data_triangles.txt
+```TriangleNumber NodeNumber XNode YNode```
+
+#### Note
+In data_triangles.txt, as each triangle has three vertices, then there are three lines for the same triangle. The order of the nodes is not important, as this is indifferent for the double integrals, just make sure it follows the previously established guidelines.
+
+The NodeNumber, XNode and YNode in data_triangles.txt and nodes.txt have to must be equal.
+
+## Example of how to use the code.
+
+In order to clarify the last section we will describe the test problem mentioned previusly. This test problem corresponds to the example proportioned by Burden (see References). The partial differential equation to solve is:
+
+[!equation](https://latex.codecogs.com/gif.latex?\frac{\partial^2&space;u(x,y)}{\partial&space;x^2}&space;&plus;&space;\frac{\partial^2&space;u(x,y)}{\partial&space;y^2}&space;=&space;0)
+
+With boundary conditions
+
+![equation](https://latex.codecogs.com/gif.latex?g(x,y)&space;=&space;4) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; for (x,y) in L<sub>6</sub> and L<sub>7</sub>
+
+![equation](https://latex.codecogs.com/gif.latex?\frac{\partial&space;u(x,y)}{\partial&space;\mathbf{n}}&space;=&space;x) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; for (x,y) in L<sub>2</sub> and L4<sub>7</sub>
+
+![equation](https://latex.codecogs.com/gif.latex?\frac{\partial&space;u(x,y)}{\partial&space;\mathbf{n}}&space;=&space;y) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; for (x,y) in L<sub>6</sub> and L<sub>5</sub>
+
+![equation](https://latex.codecogs.com/gif.latex?\frac{\partial&space;u(x,y)}{\partial&space;\mathbf{n}}&space;=&space;\frac{x&plus;y}{\sqrt2}) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; for (x,y) in L<sub>1</sub> and L<sub>3</sub>
+
+![Integration Surface](https://drive.google.com/open?id=1x23nJYIxmO1KAo_8F5ur5yqlZU8QgIvi)
+
+### References
 
 The algorithms used in this project where taken from:
 Burden, R., & Faires, J. D. (2004). Numerical analysis. Cengage Learning.
