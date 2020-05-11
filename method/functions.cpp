@@ -1,20 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include "triangle.h" //??
+#include "triangle.h"
 #include "finite_element.h"
 #include "Math/DblInt.h"
 #include "Math/LInt.h"
 #include "Math/LinAlg.h"
 
-//#include <Armadillo>
-
 using namespace std;
-//using namespace arma;
 
 FiniteElement::FiniteElement(){
   //cout << "Bienvenido" << endl;
-
 }
 
 
@@ -40,6 +36,7 @@ void FiniteElement::load_data(){
   m = 11;
   p = 4;
   
+  // Save data about each triangle to Triangle objects
   file.open("../data/data_triangles.txt");
   
   while (file >> number >> node >> x >> y){
@@ -63,7 +60,7 @@ void FiniteElement::load_data(){
   
   file.close();
   
-  
+  // Save coordinates of each node to matrix
   file.open("../data/nodes_new.txt");
   
   while (file >> node >> x >> y){
@@ -78,10 +75,6 @@ void FiniteElement::load_data(){
 
 void FiniteElement::solve( vfunc VF){
   
-  // vector <double> gamma(m);
-  // vector <double> beta(n);
-  // vector <vector <double>> alpha(n, vector <double> (n));
-  
   vec gamma(m);
   vec beta(n);
   mat alpha(n, vec(n));
@@ -94,9 +87,6 @@ void FiniteElement::solve( vfunc VF){
   
   double det;
   double integral_p, integral_q, integral_r;
-  
-  //double element[i].vertices[0][0], element[i].vertices[2][0], element[i].vertices[2][0];
-  //double element[i].vertices[0][1], element[i].vertices[1][1], element[i].vertices[2][1];
   
   int l, t;
   
@@ -112,8 +102,6 @@ void FiniteElement::solve( vfunc VF){
   // Step 1
   for (int l=n; l<m; l++){
     gamma[l] = VF[4](nodes[l][0], nodes[l][1]);
-
-    //    gamma.at(l) = g(vertex[l][0], vertex[l][0]); // g def is missing
   }
   
   // Step 2 is not necessary because vectors are already initialized to 0
@@ -184,7 +172,6 @@ void FiniteElement::solve( vfunc VF){
           
           else{
             Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[l+1], 100);
-            //cout << Int << endl;
           }
         }
         
@@ -229,18 +216,12 @@ void FiniteElement::solve( vfunc VF){
             if (t < n){
               alpha[l][t] += z[i][k][j];
               alpha[t][l] += z[i][k][j];
-              
-              // alpha.at(l,t) += z[i][k][j];
-              // alpha.at(t,l) += z[i][k][j];
             }
             
             else beta[l] -= gamma[t]*z[i][k][j];
-            
-            // else beta.at(l) -= gamma.at(t)*z[i][k][j];
           }
           
           else if (t < n) beta[t] -= gamma[l]*z[i][k][j];
-          // else if (t <= n) beta.at(t) -= gamma.at(l)*z[i][k][j];
         }
       }
       
@@ -248,9 +229,6 @@ void FiniteElement::solve( vfunc VF){
       if (l < n){
         alpha[l][l] += z[i][k][k];
         beta[l] += H[i][k];
-        
-        // alpha.at(l,l) += z[i][k][k];
-        // beta.at(l) += H[i][k];
       }
     }
   }
@@ -273,18 +251,13 @@ void FiniteElement::solve( vfunc VF){
             if (t < n){
               alpha[l][t] += J[i-K][k][j];
               alpha[t][l] += J[i-K][k][j];
-              
-              // alpha.at(l,t) += z[i][k][j];
-              // alpha.at(t,l) += z[i][k][j];
             }
             
             else beta[l] -= gamma[t]*J[i-K][k][j];
-            // else beta.at(l) -= gamma.at(t)*z[i][k][j];
             
           }
           
           else if (t < n) beta[t] -= gamma[l]*J[i-K][k][j];
-          // else if (t <= n) beta.at(t) -= gamma.at(l)*z[i][k][j];
         }
       }
       
@@ -292,9 +265,6 @@ void FiniteElement::solve( vfunc VF){
         if (l < n){
           alpha[l][l] += J[i-K][k][k];
           beta[l] += I[i-K][k];
-          
-          // alpha.at(l,l) += z[i][k][k];
-          // beta.at(l) += H[i][k];
         }
     }
   }
@@ -302,6 +272,7 @@ void FiniteElement::solve( vfunc VF){
   LinAlg.SOR(alpha, beta, gamma, 1.25, 0.03, 20);
   
   // Step 21
+  // Save gamma entries to file
   for (int i=0; i<m; i++){
     gamma_file << gamma[i] << " ";
     }
@@ -309,6 +280,8 @@ void FiniteElement::solve( vfunc VF){
   
   gamma_file.close();
   
+  // Save N coefficients to file (number, ai, bi, ci)
+  N_coef_file << "TRIANGLE ai bi ci" << endl;
   
   for (int i=0; i<M; i++){
     for (int j=0; j<3; j++){
