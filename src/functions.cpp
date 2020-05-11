@@ -25,7 +25,6 @@ void FiniteElement::load_data(){
   vector <int> nodes_vec;
   ifstream file;
   
-  int count = 1; // To know in which triangle we are at
   int number, node;
   double x, y;
   
@@ -37,7 +36,7 @@ void FiniteElement::load_data(){
   p = 4;
   
   // Save data about each triangle to Triangle objects
-  file.open("data/data_triangles.txt");
+  file.open("data/input/data_triangles.txt");
   
   for (int i=0; i<M; i++){//
   
@@ -60,7 +59,7 @@ void FiniteElement::load_data(){
   file.close();
   
   // Save coordinates of each node to matrix
-  file.open("data/nodes_new.txt");
+  file.open("data/input/nodes.txt");
   
   while (file >> node >> x >> y){
   
@@ -90,8 +89,8 @@ void FiniteElement::solve( vfunc VF){
   int step = 200;
   int l, t;
   
-  ofstream gamma_file( "data/gamma_results.txt", ios::out );
-  ofstream N_coef_file( "data/N_coef_results.txt", ios::out );
+  ofstream gamma_file( "data/results/gamma_results.txt", ios::out );
+  ofstream N_coef_file( "data/results/N_coef_results.txt", ios::out );
   
   if ( !gamma_file or !N_coef_file) 
     {

@@ -17,7 +17,7 @@ SRC = $(patsubst %,$(SDIR)/%,$(_SRC))
 $(ODIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-main: $(SRC) $(OBJ)
+solver: $(SRC) $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
