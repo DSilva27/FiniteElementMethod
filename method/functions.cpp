@@ -306,7 +306,7 @@ void FiniteElement::solve( vfunc VF){
   
   
   // Step 20
-  // Solve linear system
+  LinAlg.SOR(alpha, beta, gamma, 1.25, 0.03, 20);
   
   // Step 21
   // Return gamma and N_coef
