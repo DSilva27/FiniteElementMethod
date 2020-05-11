@@ -36,6 +36,7 @@ Carolina Herrera Segura, David Silva Sánchez
 ### What does it do?
 
 Here we solve a partial differential equation in two dimensions with general expression:
+
 ![equation](https://latex.codecogs.com/gif.latex?\frac{\partial}{\partial&space;x}\left(p(x,y)\frac{\partial&space;u}{\partial&space;x}&space;\right)&space;&plus;&space;\frac{\partial}{\partial&space;y}\left(q(x,y)\frac{\partial&space;u}{\partial&space;y}&space;\right)&space;&plus;&space;r(x,y)u(x,y)&space;=&space;f(x,y))
 
 If S is the boundary of a plane surface D. If we devide the boundary S into two sub-boundaries S1 and S2. Then the function u(x,y) must have boundary contidions of the form:
@@ -45,6 +46,7 @@ In S1:
 u(x,y) = g(x,y)
 
 In S2:
+
 ![equation](https://latex.codecogs.com/gif.latex?p(x,y)\frac{\partial&space;u}{\partial&space;x}cos(\theta_1)&plus;q(x,y)\frac{\partial&space;u}{\partial&space;y}cos(\theta_2)&space;&plus;g_1(x,y)u(x,y)&space;=&space;g_2(x,y))
 
 if Φ(x,y) is the approximated solution to u(x,y). The solution given by the algorithm has the form:
