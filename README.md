@@ -27,4 +27,9 @@ Carolina Herrera Segura, David Silva Sánchez
 
 * Clone the [original repository](https://github.com/DavidSS0397/FiniteElementMethod.git)
 * Open your terminal where you cloned the repository
-* Run make
+* Run `make`
+
+### Acknowledgments
+
+The algorithms used in this project where taken from:
+Burden, R., & Faires, J. D. (2004). Numerical analysis. Cengage Learning.
