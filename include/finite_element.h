@@ -2,9 +2,9 @@
 #include <vector>
 
 #include "triangle.h"
-#include "Math/DblInt.h"
-#include "Math/LInt.h"
-#include "Math/LinAlg.h"
+#include "DblInt.h"
+#include "LInt.h"
+#include "LinAlg.h"
 
 using namespace std;
 
