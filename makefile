@@ -8,10 +8,10 @@ SDIR = src
 _DEPS = DblInt.h finite_element.h LinAlg.h LInt.h triangle.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = DblInt.cpp LinAlg.cpp LInt.cpp functions_triang.cpp
+_OBJ = DblInt.cpp LinAlg.cpp LInt.cpp
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-_SRC = main.cpp functions.cpp
+_SRC = main.cpp functions.cpp functions_triang.cpp
 SRC = $(patsubst %,$(SDIR)/%,$(_SRC))
 
 $(ODIR)/%.o: %.c $(DEPS)
