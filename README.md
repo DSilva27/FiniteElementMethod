@@ -1,6 +1,9 @@
 # Finite Element Method
 Parcial 3 de Física Computacional 2 - 2020
 
+### Contributors:
+Carolina Herrera Segura, David Silva Sánchez
+
 ### Structure of the project
 ```
 . FiniteElementMethod
