@@ -13,13 +13,13 @@ using namespace std;
 //using namespace arma;
 
 FiniteElement::FiniteElement(){
-  cout << "Bienvenido" << endl;
+  //cout << "Bienvenido" << endl;
 
 }
 
 
 FiniteElement::~FiniteElement(){
-  cout << "Adios" << endl;
+  //cout << "Adios" << endl;
 }
 
 
@@ -148,7 +148,7 @@ void FiniteElement::solve( vfunc VF){
         integral_r = DInt.DoubleIntegral( VF[2], N_coef[i][j], N_coef[i][k], elements[i].vertices, 100, 100 );
       
         z[i][j][k] = N_coef[i][1][j]*N_coef[i][1][k]*integral_p \
-                    + N_coef[i][2][j]*N_coef[i][2][k]*integral_q          \
+                    + N_coef[i][2][j]*N_coef[i][2][k]*integral_q \
                     - integral_r;
       }
     
@@ -175,6 +175,7 @@ void FiniteElement::solve( vfunc VF){
           
           else{
             Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[l+1], 100);
+            //cout << Int << endl;
           }
         }
         
@@ -210,7 +211,7 @@ void FiniteElement::solve( vfunc VF){
       
       // Step 9
       if (k > 0){
-        for (int j=0; j<k-1; j++){
+        for (int j=0; j<k; j++){
           // Step 10
           t = elements[i].nodes[j];
           
@@ -225,6 +226,7 @@ void FiniteElement::solve( vfunc VF){
             }
             
             else beta[l] -= gamma[t]*z[i][k][j];
+            
             // else beta.at(l) -= gamma.at(t)*z[i][k][j];
           }
           
@@ -269,6 +271,7 @@ void FiniteElement::solve( vfunc VF){
             
             else beta[l] -= gamma[t]*J[i-K][k][j];
             // else beta.at(l) -= gamma.at(t)*z[i][k][j];
+            
           }
           
           else if (t < n) beta[t] -= gamma[l]*J[i-K][k][j];
@@ -290,9 +293,7 @@ void FiniteElement::solve( vfunc VF){
   for(int i=0; i<n; i++){
     for(int j=0; j<n; j++){
     cout << alpha[i][j] << " ";
-    
     }
-  
   cout << endl;
   }
   
@@ -301,6 +302,8 @@ void FiniteElement::solve( vfunc VF){
     cout << beta[j] << " ";
     
     }
+  cout << endl;
+  
   
   // Step 20
   // Solve linear system
