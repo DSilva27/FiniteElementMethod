@@ -49,15 +49,15 @@ In S2:
 
 ![equation](https://latex.codecogs.com/gif.latex?p(x,y)\frac{\partial&space;u}{\partial&space;x}cos(\theta_1)&plus;q(x,y)\frac{\partial&space;u}{\partial&space;y}cos(\theta_2)&space;&plus;g_1(x,y)u(x,y)&space;=&space;g_2(x,y))
 
-if 
-![equation](https://latex.codecogs.com/gif.latex?\Phi(x,y)) is the approximated solution to 
-![equation](https://latex.codecogs.com/gif.latex?u(x,y)), the solution given by the algorithm has the form:
+if Φ(x,y) is the approximated solution to u(x,y), the solution given by the algorithm has the form:
 
 ![equation](https://latex.codecogs.com/gif.latex?\Phi(x,y)&space;=&space;\sum_{k=0}^{m-1}&space;\gamma_{k}\Phi_k(x,y)&space;\quad&space;(1))
 
 where
 
-![equation](https://latex.codecogs.com/gif.latex?\Phi_k(x,y)&space;=&space;N^{(i)}_j\&space;on\&space;T_i\&space;if\&space;E_k&space;=&space;(x^{(i)}_j,y^{(i)}_j))
+![equation](https://latex.codecogs.com/gif.latex?\Phi_k(x,y)&space;=&space;N^{(i)}_j) on T<sub>i</sub> if:
+
+![equation](https://latex.codecogs.com/gif.latex?E_k&space;=&space;(x^{(i)}_j,y^{(i)}_j&space;))
 
 And N<sup>(i)</sup><sub>j</sub> is the polynomial that describes the corresponding edge in the triangle T<sub>i</sub> and has the form:
 
