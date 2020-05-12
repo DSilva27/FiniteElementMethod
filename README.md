@@ -13,18 +13,22 @@ Carolina Herrera Segura, David Silva Sánchez
 |  └── Linear Equation Solver example
 ├── include
 │  └── headers
-└── src
+├── src
 |   └── Finite Element Method Solver
-└── tools
+├── tools
 |   ├── Integration Methods
 |   └── Linear Algebra Methods
-└── data
-    ├── Input
-    |   ├── data_triangles.txt
-    |   └── nodes.txt
-    └── Output    
-    |   ├── gamma_results.txt
-    |   └── N_coef_results.txt
+├── data
+|   ├── Input
+|   |   ├── data_triangles.txt
+|   |   └── nodes.txt
+|   └── Output    
+|       ├── gamma_results.txt
+|       └── N_coef_results.txt
+└──extras  
+    ├── Images
+    |   └──IntSurface.png
+    └── DataVisualization.ipynb
 ```
 
 ## Installation
@@ -135,7 +139,7 @@ With boundary conditions:
 
 The following image illustrates how to enumerate the nodes for the given problem. Notice that S2 = L1 + L2 + L4 + L5 and S1 is formed by the rest of the L<sub>i</sub>.
 
-![Integration Surface](https://github.com/DavidSS0397/FiniteElementMethod/blob/master/data/images/IntSurface.png)
+![Integration Surface](https://github.com/DavidSS0397/FiniteElementMethod/blob/master/extras/images/IntSurface.png)
 
 Compare the image with the files in ```data/input``` and the boundary conditions with the functions defined in ```src/main.cpp``` and you'll be ready to test your own system.
 
