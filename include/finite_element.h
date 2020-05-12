@@ -39,6 +39,8 @@ class FiniteElement{
   void gamma_to_variable( vec& );
   void N_coef_to_variable( cube& );
   void results_to_variable( vec&, cube& );
+  double evaluate( double, double );
+  void generate_data();
   ~FiniteElement();
   
   private:
@@ -52,7 +54,10 @@ class FiniteElement{
   mat nodes;
   cube N_coef;
   vec gamma;
-
+  
+  float sign( vec, vec, vec );
+  bool is_in_triangle( vec, vec, vec, vec );
+  
   //Math tools  
   TriangleIntegrator DInt;
   LineIntegrator LInt;

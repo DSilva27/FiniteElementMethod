@@ -146,11 +146,12 @@ void FiniteElement::N_coef_to_txt(){
   }
   
   // Save N coefficients to file (number, ai, bi, ci)
-  N_coef_file << "TRIANGLE ai bi ci" << endl;
+  N_coef_file << "TRIANGLE NODE ai bi ci" << endl;
   
   for (int i=0; i<M; i++){
     for (int j=0; j<3; j++){
       N_coef_file << i;
+      N_coef_file << " " << elements[i].nodes[j];
       
       for (int k=0; k<3; k++){
         N_coef_file << " " << N_coef[i][k][j];
@@ -183,6 +184,82 @@ void FiniteElement::N_coef_to_variable( cube& var ){
 void FiniteElement::results_to_variable( vec& var1, cube& var2 ){
   gamma_to_variable( var1 );
   N_coef_to_variable( var2 );
+}
+
+
+float FiniteElement::sign( vec p1, vec p2, vec p3 ){
+  
+  return (p1[0] - p3[0])*(p2[1] - p3[1]) - (p2[0] - p3[0])*(p1[1] - p3[1]);
+}
+
+
+bool FiniteElement::is_in_triangle( vec point, vec v1, vec v2, vec v3 ){
+  float d1, d2, d3;
+  bool has_neg, has_pos;
+  
+  d1 = sign(point, v1, v2);
+  d2 = sign(point, v2, v3);
+  d3 = sign(point, v3, v1);
+  
+  has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+  has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+  
+  return !(has_neg && has_pos);
+}
+
+
+double FiniteElement::evaluate( double x, double y ){
+  vec point = {x, y};
+  bool value;
+  double eval;
+  
+  for (int i=0; i<M; i++){
+    value = is_in_triangle( point,
+                            elements[i].vertices[0], 
+                            elements[i].vertices[1],
+                            elements[i].vertices[2] );
+    
+    if ( value == true ){
+      eval = 0;
+      
+      for (int j=0; j<3; j++){
+        
+        eval += gamma[elements[i].nodes[j]]*( N_coef[i][0][j] 
+                                              + N_coef[i][1][j]*x 
+                                              + N_coef[i][2][j]*y );
+      }
+      
+      return eval;
+    }
+  }
+  
+  return 0;
+}
+
+
+void FiniteElement::generate_data(){
+  ofstream data_file( "data/results/data_eval.txt", ios::out );
+  float x_min = 0, x_max = 0.6;
+  float y_min = 0, y_max = 0.4;
+  float delta = 0.01;
+  float x, y;
+  double eval;
+  
+  int xrange = (x_max - x_min)/delta + 1;
+  int yrange = (y_max - y_min)/delta + 1;
+  
+  for(int i=0; i<xrange; i++){
+    for(int j=0; j<yrange; j++){
+      x = x_min + i*delta;
+      y = y_min + j*delta;
+      
+      eval = evaluate( x, y );
+      
+      data_file << eval << " ";
+    }
+    
+    data_file << endl;
+  }
 }
 
 
@@ -372,7 +449,9 @@ void FiniteElement::solve( vfunc VF ){
     }
   }
   // Step 20
-  LinAlg.SOR( alpha, beta, gamma, 1.25, 0.00003, 2000 );
+  LinAlg.SOR( alpha, beta, gamma, 1.25, 0.01, 20 );
+  
+  //for (int i=0; )
   
   // Step 21
   results_to_txt();

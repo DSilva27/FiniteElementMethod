@@ -26,12 +26,15 @@ int main(){
   FiniteElement ex;
   vector< double > gamma;
   vector< vector< vector < double > > > N_coef;
+  double res;
   
   ex.load_data();
   
   ex.solve( VFUNC );
   
   ex.results_to_variable( gamma, N_coef );
+  
+  ex.generate_data();
   
   return 0;
 }
