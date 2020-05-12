@@ -117,13 +117,13 @@ In data_triangles.txt, as each triangle has three vertices, then there are three
 
 The NodeNumber, XNode and YNode in data_triangles.txt and nodes.txt have to must be equal.
 
-## Example of how to use the code.
+## Example
 
 In order to clarify the last section we will describe the test problem mentioned previusly. This test problem corresponds to the example proportioned by Burden (see References). The partial differential equation to solve is:
 
-[!equation](https://latex.codecogs.com/gif.latex?\frac{\partial^2&space;u(x,y)}{\partial&space;x^2}&space;&plus;&space;\frac{\partial^2&space;u(x,y)}{\partial&space;y^2}&space;=&space;0)
+![equation](https://latex.codecogs.com/gif.latex?\frac{\partial^2&space;u(x,y)}{\partial&space;x^2}&space;&plus;&space;\frac{\partial^2&space;u(x,y)}{\partial&space;y^2}&space;=&space;0)
 
-With boundary conditions
+With boundary conditions:
 
 ![equation](https://latex.codecogs.com/gif.latex?g(x,y)&space;=&space;4) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; for (x,y) in L<sub>6</sub> and L<sub>7</sub>
 
@@ -133,7 +133,11 @@ With boundary conditions
 
 ![equation](https://latex.codecogs.com/gif.latex?\frac{\partial&space;u(x,y)}{\partial&space;\mathbf{n}}&space;=&space;\frac{x&plus;y}{\sqrt2}) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; for (x,y) in L<sub>1</sub> and L<sub>3</sub>
 
-![Integration Surface](https://drive.google.com/open?id=1x23nJYIxmO1KAo_8F5ur5yqlZU8QgIvi)
+The following image illustrates how to enumerate the nodes for the given problem. Notice that S2 = L1 + L2 + L4 + L5 and S1 is formed by the rest of the L<sub>i</sub>.
+
+![Integration Surface](https://github.com/DavidSS0397/FiniteElementMethod/blob/master/data/images/IntSurface.png)
+
+Compare the image with the files in ```data/input``` and the boundary conditions with the functions defined in ```src/main.cpp``` and you'll be ready to test your own system.
 
 ### References
 
