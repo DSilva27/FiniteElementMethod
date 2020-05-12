@@ -63,7 +63,7 @@ where
 
 ![equation](https://latex.codecogs.com/gif.latex?E_k&space;=&space;(x^{(i)}_j,y^{(i)}_j&space;))
 
-And N<sup>(i)</sup><sub>j</sub> is the polynomial that describes the corresponding edge in the triangle T<sub>i</sub> and has the form:
+And N<sub>j</sub><sup>(i)</sup> is the polynomial that describes the corresponding edge in the triangle T<sub>i</sub> and has the form:
 
 ![equation](https://latex.codecogs.com/gif.latex?N^{(i)}_j(x,y)&space;=&space;a^{(i)}_j&space;&plus;&space;b^{(i)}_jx&space;&plus;&space;c^{(i)}_jy&space;\quad&space;(2))
 
@@ -94,9 +94,10 @@ Has the information relating each node to its x and y coordinates.
 
 Relates the vertices of each triangle with the corresponding nodes.
 
-Now everything is ready. Compile your code using ```make``` and run ```./solver```.
 
-Your results will be printed in data/results/ .
+Now everything is ready! Compile your code using ```make``` and run ```./solver```.
+
+Your results will be printed in ```data/results/``` .
 
 #### gamma_results.txt
 
@@ -119,7 +120,7 @@ Following this guidelines, here is a brief explanation of how you should fill yo
 #### Note
 In data_triangles.txt, as each triangle has three vertices, then there are three lines for the same triangle. The order of the nodes is not important, as this is indifferent for the double integrals, just make sure it follows the previously established guidelines.
 
-The NodeNumber, XNode and YNode in data_triangles.txt and nodes.txt have to must be equal.
+The NodeNumber, XNode and YNode in data_triangles.txt and nodes.txt must be equal for each node.
 
 ## Example
 
