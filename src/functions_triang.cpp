@@ -6,8 +6,7 @@ using namespace std;
 
 
 Triangle::Triangle(mat vert,
-                   vector <int> nod){
-  //cout << "Bienvenido" << endl;
+                   vector< int > nod){
   
   vertices = vert;
   nodes = nod;
@@ -15,6 +14,6 @@ Triangle::Triangle(mat vert,
 
 
 Triangle::~Triangle(){
-  //cout << "Adios" << endl;
+  //
 }
 

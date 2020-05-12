@@ -9,20 +9,21 @@
 
 using namespace std;
 
+
 FiniteElement::FiniteElement(){
-  //cout << "Bienvenido" << endl;
+  //
 }
 
 
 FiniteElement::~FiniteElement(){
-  //cout << "Adios" << endl;
+  //
 }
 
 
 void FiniteElement::load_data(){
   
   mat vertices_vec;
-  vector <int> nodes_vec;
+  vector< int > nodes_vec;
   ifstream file;
   
   int number, node;
@@ -35,6 +36,12 @@ void FiniteElement::load_data(){
   m = 11;
   p = 4;
   
+  cube N_coef_init( M, mat( 3, vec(3) ) );
+  vec gamma_init( m );
+  
+  N_coef = N_coef_init;
+  gamma = gamma_init;
+  
   // Save data about each triangle to Triangle objects
   file.open("data/input/data_triangles.txt");
   
@@ -44,13 +51,13 @@ void FiniteElement::load_data(){
       // Fill vectors with data
       file >> number >> node >> x >> y;
       
-      vertices_vec.push_back({x, y});
-      nodes_vec.push_back(node);
+      vertices_vec.push_back( {x, y} );
+      nodes_vec.push_back( node );
     }
     
     // Create Triangle object with data
-    Triangle triangle(vertices_vec, nodes_vec);
-    elements.push_back(triangle);
+    Triangle triangle( vertices_vec, nodes_vec );
+    elements.push_back( triangle );
     
     vertices_vec.clear();
     nodes_vec.clear();
@@ -59,29 +66,80 @@ void FiniteElement::load_data(){
   file.close();
   
   // Save coordinates of each node to matrix
-  file.open("data/input/nodes.txt");
+  file.open( "data/input/nodes.txt" );
   
   while (file >> node >> x >> y){
   
     //Fills nodes vector with information about each node
-    nodes.push_back({x, y});
+    nodes.push_back( {x, y} );
   }
   
   file.close();
 }
 
 
+void FiniteElement::save_gamma(){
+  ofstream gamma_file( "data/results/gamma_results.txt", ios::out );
+  
+  if ( !gamma_file ) 
+    {
+      cout << "Can't open gamma_results.txt" << endl;
+      exit( 1 );
+  }
+  
+  // Save gamma entries to file
+  for (int i=0; i<m; i++){
+    gamma_file << gamma[i] << " ";
+  }
+  gamma_file << endl;
+  
+  gamma_file.close();
+}
+
+
+void FiniteElement::save_N_coef(){
+  ofstream N_coef_file( "data/results/N_coef_results.txt", ios::out );
+  
+  if ( !N_coef_file ) 
+    {
+      cout << "Can't open N_coef_results.txt" << endl;
+      exit( 1 );
+  }
+  
+  // Save N coefficients to file (number, ai, bi, ci)
+  N_coef_file << "TRIANGLE ai bi ci" << endl;
+  
+  for (int i=0; i<M; i++){
+    for (int j=0; j<3; j++){
+      N_coef_file << i;
+      
+      for (int k=0; k<3; k++){
+        N_coef_file << " " << N_coef[i][k][j];
+      }
+      
+      N_coef_file << endl;
+    }
+  }
+  
+  N_coef_file.close();
+}
+
+
+void FiniteElement::save_results_to_txt(){
+  save_gamma();
+  save_N_coef();
+}
+
+
 void FiniteElement::solve( vfunc VF){
   
-  vec gamma(m);
-  vec beta(n);
-  mat alpha(n, vec(n));
+  vec beta( n );
+  mat alpha( n, vec( n ) );
   
-  cube N_coef(M, mat(3, vec(3)));
-  cube z(M, mat(3, vec(3)));
-  cube J((N-K), mat(3, vec(3)));
-  mat I((N-K), vec(3));
-  mat H(M, vec (3));
+  cube z( M, mat( 3, vec( 3 ) ) );
+  cube J( (N-K), mat( 3, vec( 3 ) ) );
+  mat I( (N-K), vec( 3 ) );
+  mat H( M, vec ( 3 ) );
   
   double det;
   double integral_p, integral_q, integral_r;
@@ -89,18 +147,10 @@ void FiniteElement::solve( vfunc VF){
   int step = 200;
   int l, t;
   
-  ofstream gamma_file( "data/results/gamma_results.txt", ios::out );
-  ofstream N_coef_file( "data/results/N_coef_results.txt", ios::out );
-  
-  if ( !gamma_file or !N_coef_file) 
-    {
-      cout << "Can't open file'" << endl;
-      exit( 1 );
-    }
   
   // Step 1
   for (int l=n; l<m; l++){
-    gamma[l] = VF[4](nodes[l][0], nodes[l][1]);
+    gamma[l] = VF[4]( nodes[l][0], nodes[l][1] );
   }
   
   // Step 2 is not necessary because vectors are already initialized to 0
@@ -112,26 +162,26 @@ void FiniteElement::solve( vfunc VF){
                 {1, elements[i].vertices[1][0], elements[i].vertices[1][1]},
                 {1, elements[i].vertices[2][0], elements[i].vertices[2][1]} };
 
-    det = LinAlg.Det33(Matrix); 
+    det = LinAlg.Det33( Matrix ); 
     
     // Coefficients of the function N(x, y)
     // N[i][a,b,c][1,2,3]
-    N_coef[i][0][0] = (elements[i].vertices[1][0]*elements[i].vertices[2][1]\
-                       - elements[i].vertices[1][1]*elements[i].vertices[2][0])/det;
+    N_coef[i][0][0] = ( elements[i].vertices[1][0]*elements[i].vertices[2][1]\
+                       - elements[i].vertices[1][1]*elements[i].vertices[2][0] )/det;
 
-    N_coef[i][0][1] = (elements[i].vertices[2][0]*elements[i].vertices[0][1]\
-                       - elements[i].vertices[2][1]*elements[i].vertices[0][0])/det;
+    N_coef[i][0][1] = ( elements[i].vertices[2][0]*elements[i].vertices[0][1]\
+                       - elements[i].vertices[2][1]*elements[i].vertices[0][0] )/det;
 
-    N_coef[i][0][2] = (elements[i].vertices[0][0]*elements[i].vertices[1][1]\
-                       - elements[i].vertices[0][1]*elements[i].vertices[1][0])/det;
+    N_coef[i][0][2] = ( elements[i].vertices[0][0]*elements[i].vertices[1][1]\
+                       - elements[i].vertices[0][1]*elements[i].vertices[1][0] )/det;
     
-    N_coef[i][1][0] = (elements[i].vertices[1][1] - elements[i].vertices[2][1])/det;
-    N_coef[i][1][1] = (elements[i].vertices[2][1] - elements[i].vertices[0][1])/det;
-    N_coef[i][1][2] = (elements[i].vertices[0][1] - elements[i].vertices[1][1])/det;
+    N_coef[i][1][0] = ( elements[i].vertices[1][1] - elements[i].vertices[2][1] )/det;
+    N_coef[i][1][1] = ( elements[i].vertices[2][1] - elements[i].vertices[0][1] )/det;
+    N_coef[i][1][2] = ( elements[i].vertices[0][1] - elements[i].vertices[1][1] )/det;
     
-    N_coef[i][2][0] = (elements[i].vertices[2][0] - elements[i].vertices[1][0])/det;
-    N_coef[i][2][1] = (elements[i].vertices[0][0] - elements[i].vertices[2][0])/det;
-    N_coef[i][2][2] = (elements[i].vertices[1][0] - elements[i].vertices[0][0])/det;
+    N_coef[i][2][0] = ( elements[i].vertices[2][0] - elements[i].vertices[1][0] )/det;
+    N_coef[i][2][1] = ( elements[i].vertices[0][0] - elements[i].vertices[2][0] )/det;
+    N_coef[i][2][2] = ( elements[i].vertices[1][0] - elements[i].vertices[0][0] )/det;
   }
   
   // Step 4
@@ -162,15 +212,15 @@ void FiniteElement::solve( vfunc VF){
         for (int l=0; l<p; l++){
           
           if (l == 0){
-            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[n], nodes[l], step);
+            Int += LInt.LineIntegral( VF[5], N_coef[i][j], N_coef[i][k], nodes[n], nodes[l], step );
           }
           
           else if(l == p-1){
-            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[m-1], step);
+            Int += LInt.LineIntegral( VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[m-1], step );
           }
           
           else{
-            Int += LInt.LineIntegral(VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[l+1], step);
+            Int += LInt.LineIntegral( VF[5], N_coef[i][j], N_coef[i][k], nodes[l], nodes[l+1], step );
           }
         }
         
@@ -267,30 +317,8 @@ void FiniteElement::solve( vfunc VF){
     }
   }
   // Step 20
-  LinAlg.SOR(alpha, beta, gamma, 1.25, 0.00003, 2000);
+  LinAlg.SOR( alpha, beta, gamma, 1.25, 0.00003, 2000 );
   
   // Step 21
-  // Save gamma entries to file
-  for (int i=0; i<m; i++){
-    gamma_file << gamma[i] << " ";
-    }
-  gamma_file << endl;
-  
-  gamma_file.close();
-  
-  // Save N coefficients to file (number, ai, bi, ci)
-  N_coef_file << "TRIANGLE ai bi ci" << endl;
-  
-  for (int i=0; i<M; i++){
-    for (int j=0; j<3; j++){
-      N_coef_file << i;
-      for (int k=0; k<3; k++){
-        N_coef_file << " " << N_coef[i][k][j];
-      }
-      
-      N_coef_file << endl;
-    }
-  }
-  
-  N_coef_file.close();
+  save_results_to_txt();
 }

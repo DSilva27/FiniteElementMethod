@@ -8,7 +8,7 @@
 
 using namespace std;
 
-typedef double (*func)(double, double);
+typedef double (*func)( double, double );
 typedef vector< func > vfunc;
 
 typedef vector< double > vec;
@@ -33,6 +33,9 @@ class FiniteElement{
   FiniteElement();
   void load_data();
   void solve( vfunc );
+  void save_gamma();
+  void save_N_coef();
+  void save_results_to_txt();
   ~FiniteElement();
   
   private:
@@ -42,11 +45,12 @@ class FiniteElement{
   int n;
   int m;
   int p;
-  vector <class Triangle> elements;
+  vector < class Triangle > elements;
   mat nodes;
+  cube N_coef;
+  vec gamma;
 
-  //Math tools
-  
+  //Math tools  
   TriangleIntegrator DInt;
   LineIntegrator LInt;
   Linalg LinAlg;

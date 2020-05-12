@@ -7,18 +7,18 @@
 using namespace std;
 
 class Triangle;
-typedef vector< vector< double >> mat;
+typedef vector< vector< double > > mat;
 
 class Triangle{
   friend class FiniteElement;
   
   public:
-  Triangle(mat, vector <int>);
+  Triangle( mat, vector< int > );
   ~Triangle();
   
   private:
   mat vertices;
-  vector <int> nodes;
+  vector< int > nodes;
 };
 
 #endif
