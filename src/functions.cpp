@@ -11,7 +11,12 @@ using namespace std;
 
 
 FiniteElement::FiniteElement(){
-  //
+  K = 0;
+  N = 0;
+  M = 0;
+  n = 0;
+  m = 0;
+  p = 0;
 }
 
 
@@ -30,6 +35,7 @@ void FiniteElement::load_data(){
   int value, number, node;
   double x, y;
   
+  // Upload parameters from file to class variables
   file.open("data/input/parameters.txt");
   
   while ( file >> letter >> eq >> value ){
@@ -103,7 +109,7 @@ void FiniteElement::load_data(){
   
   while (file >> node >> x >> y){
   
-    //Fills nodes vector with information about each node
+    // Fill nodes vector with information about each node
     nodes.push_back( {x, y} );
   }
   
@@ -180,7 +186,7 @@ void FiniteElement::results_to_variable( vec& var1, cube& var2 ){
 }
 
 
-void FiniteElement::solve( vfunc VF){
+void FiniteElement::solve( vfunc VF ){
   
   vec beta( n );
   mat alpha( n, vec( n ) );
