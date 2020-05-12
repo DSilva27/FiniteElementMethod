@@ -78,7 +78,7 @@ void FiniteElement::load_data(){
 }
 
 
-void FiniteElement::save_gamma(){
+void FiniteElement::gamma_to_txt(){
   ofstream gamma_file( "data/results/gamma_results.txt", ios::out );
   
   if ( !gamma_file ) 
@@ -97,7 +97,7 @@ void FiniteElement::save_gamma(){
 }
 
 
-void FiniteElement::save_N_coef(){
+void FiniteElement::N_coef_to_txt(){
   ofstream N_coef_file( "data/results/N_coef_results.txt", ios::out );
   
   if ( !N_coef_file ) 
@@ -125,9 +125,25 @@ void FiniteElement::save_N_coef(){
 }
 
 
-void FiniteElement::save_results_to_txt(){
-  save_gamma();
-  save_N_coef();
+void FiniteElement::results_to_txt(){
+  gamma_to_txt();
+  N_coef_to_txt();
+}
+
+
+void FiniteElement::gamma_to_variable( vec& var ){
+  var = gamma;
+}
+
+
+void FiniteElement::N_coef_to_variable( cube& var ){
+  var = N_coef;
+}
+
+
+void FiniteElement::results_to_variable( vec& var1, cube& var2 ){
+  gamma_to_variable( var1 );
+  N_coef_to_variable( var2 );
 }
 
 
@@ -320,5 +336,5 @@ void FiniteElement::solve( vfunc VF){
   LinAlg.SOR( alpha, beta, gamma, 1.25, 0.00003, 2000 );
   
   // Step 21
-  save_results_to_txt();
+  results_to_txt();
 }

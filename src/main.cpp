@@ -24,18 +24,14 @@ int main(){
 
   vfunc VFUNC{ P, Q, R, F, G, G1, G2 };
   FiniteElement ex;
+  vector< double > gamma;
+  vector< vector< vector < double > > > N_coef;
   
   ex.load_data();
   
-  /*
-  for (int i=0; i<ex.M; i++){
-    
-    cout << ex.nodes[i][2] << endl;
-    //cout << ex.elements[i].boundary[2] << endl;
-    
-  }*/
-  
   ex.solve( VFUNC );
+  
+  ex.results_to_variable( gamma, N_coef );
   
   return 0;
 }
@@ -56,17 +52,17 @@ double G1(double x, double y){ return 0; }
 double G2(double x, double y){
 
   if ( ((x >= 0 && x <= 0.2) && (y >= 0.2 && y <= 0.4)) or ((x > 0.4 && x <= 0.5) && (y >= 0.1 && y <= 0.2)) ){
-
+    
       return (x + y)/2;
-    }
-
+  }
+  
   else if ( ((x > 0.2 && x <= 0.4) && (y == 0.2)) or ((x > 0.5 && x <= 0.6) && (y == 0.1 )) ){
-
+  
     return x;
   }
-
+  
   else if( x == 0.6 && (y >= 0 && y < 0.1)){
-
+  
     return y;
   }
   

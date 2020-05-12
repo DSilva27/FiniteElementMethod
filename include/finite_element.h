@@ -33,9 +33,12 @@ class FiniteElement{
   FiniteElement();
   void load_data();
   void solve( vfunc );
-  void save_gamma();
-  void save_N_coef();
-  void save_results_to_txt();
+  void gamma_to_txt();
+  void N_coef_to_txt();
+  void results_to_txt();
+  void gamma_to_variable( vec& );
+  void N_coef_to_variable( cube& );
+  void results_to_variable( vec&, cube& );
   ~FiniteElement();
   
   private:
