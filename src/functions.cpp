@@ -26,15 +26,48 @@ void FiniteElement::load_data(){
   vector< int > nodes_vec;
   ifstream file;
   
-  int number, node;
+  char letter, eq;
+  int value, number, node;
   double x, y;
   
-  K = 2;
-  N = 6;
-  M = 10;
-  n = 5;
-  m = 11;
-  p = 4;
+  file.open("data/input/parameters.txt");
+  
+  while ( file >> letter >> eq >> value ){
+    
+    switch( letter ){
+    
+    case 'K':
+      K = value;
+      break;
+    
+    case 'N':
+      N = value;
+      break;
+    
+    case 'M':
+      M = value;
+      break;
+    
+    case 'n':
+      n = value;
+      break;
+    
+    case 'm':
+      m = value;
+      break;
+    
+    case 'p':
+      p = value;
+      break;
+    
+    default:
+      cout << "Something went wrong." << endl;
+      break;
+    }
+    
+  }
+  
+  file.close();
   
   cube N_coef_init( M, mat( 3, vec(3) ) );
   vec gamma_init( m );
