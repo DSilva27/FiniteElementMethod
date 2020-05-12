@@ -2,26 +2,26 @@
 #define LINALG_H
 
 #include <iostream>
-//#include <armadillo>
+
 #include <vector>
 #include <cmath>
 
 using namespace std;
-//using namespace arma;
 
-typedef vector < double > vec;
-typedef vector < vec > mat;
+typedef vector< double > vec;
+typedef vector< vec > mat;
 
 class Linalg{
+    
  public:
-  Linalg(void);
+     
+  Linalg( void );
 
-  //  void Solve( vector< double > &, vector< vector< double > >, vector< double > );
+  void SOR( mat, vec, vec &,  double,
+            double,  int );
 
-  void SOR(const mat, const vec, vec &, const double, const double, const int);
-  double DistBetVectors( const vec, const vec);
+  double DistBetVectors(  vec,  vec );
 
-  //double Determinant( vector< vector< double > > );
   double Det33( mat );
 };
 

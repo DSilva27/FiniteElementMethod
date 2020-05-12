@@ -8,25 +8,27 @@ TriangleIntegrator::TriangleIntegrator(void){}
 //Calculates the Jacobian of the transformation
 double TriangleIntegrator::dJ( double u, double v, mat vert ){
 
-  double dxdu = ( (1 - v) * vert[1][0] + v * vert[1][0] - vert[0][0] );
+  double dxdu = ( (1 - v) * vert[1][0] + v*vert[1][0] - vert[0][0] );
   double dxdv = ( u*vert[2][0] - u*vert[1][0] );
 
-  double dydu = ( (1 - v) * vert[1][1] + v * vert[1][1] - vert[0][1] );
+  double dydu = ( ( 1 - v ) * vert[1][1] + v*vert[1][1] - vert[0][1] );
   double dydv = ( u*vert[2][1] - u*vert[1][1] );
 
   return std::abs( dxdu*dydv - dxdv*dydu );
 }
 
 //Calculates x or y, given u and v
-double TriangleIntegrator::Transf( double u, double v, double c1, double c2, double c3 ) {return (1 - u)*c1 + u*( (1 - v)*c2 + v*c3 );}
+double TriangleIntegrator::Transf( double u, double v, double c1, double c2, double c3 ) { 
+  
+  return (1 - u)*c1 + u*( (1 - v)*c2 + v*c3 ); }
 
 //Calculates the integrand for a given u and v
 double TriangleIntegrator::TransfIntegrand( func f, mat vert, double u, double v ){
 
-  double x = Transf( u, v, vert[0][0], vert[1][0], vert[2][0]);
-  double y = Transf( u, v, vert[0][1], vert[1][1], vert[2][1]);
+  double x = Transf( u, v, vert[0][0], vert[1][0], vert[2][0] );
+  double y = Transf( u, v, vert[0][1], vert[1][1], vert[2][1] );
 
-  double I = f(x,y);
+  double I = f( x, y );
 
   I *= dJ( u, v, vert );
 
@@ -35,8 +37,8 @@ double TriangleIntegrator::TransfIntegrand( func f, mat vert, double u, double v
 
 double TriangleIntegrator::TransfIntegrand( func f, vec N1, mat vert, double u, double v ){
 
-  double x = Transf( u, v, vert[0][0], vert[1][0], vert[2][0]);
-  double y = Transf( u, v, vert[0][1], vert[1][1], vert[2][1]);
+  double x = Transf( u, v, vert[0][0], vert[1][0], vert[2][0] );
+  double y = Transf( u, v, vert[0][1], vert[1][1], vert[2][1] );
 
   double I;
 
@@ -49,8 +51,8 @@ double TriangleIntegrator::TransfIntegrand( func f, vec N1, mat vert, double u, 
 
 double TriangleIntegrator::TransfIntegrand( func f, vec N1, vec N2, mat vert, double u, double v ){
 
-  double x = Transf( u, v, vert[0][0], vert[1][0], vert[2][0]);
-  double y = Transf( u, v, vert[0][1], vert[1][1], vert[2][1]);
+  double x = Transf( u, v, vert[0][0], vert[1][0], vert[2][0] );
+  double y = Transf( u, v, vert[0][1], vert[1][1], vert[2][1] );
 
   double I;
 
@@ -61,21 +63,25 @@ double TriangleIntegrator::TransfIntegrand( func f, vec N1, vec N2, mat vert, do
   return I;
 }
 
+
+//Here we apply Simpson's Double Integral method. This is not a general method. It is simplified for the current problem
+//in order to save memory and optimize the algorithm
+
 //Calculates the double integral using Simpson's Rule
-double TriangleIntegrator::DoubleIntegral(func f, //Integrand
-                                          mat vert, //Vertices
-                                          double n, double m //Parameters for integration
-                                          ){
+//f -> function (see integrands in referece)
+//vert -> matrix with all vertices of the triangle
+//n -> number of steps for integrals in x
+//m -> number of steps for integrals in y
 
-  //Here we apply Simpson's Double Integral method. This is not a general method. It is simplified for the current problem
-  //in order to save memory and optimize the algorithm
-
+double TriangleIntegrator::DoubleIntegral( func f, mat vert, 
+                                          int n, int m ){
+ 
   double h = 1./n;
   double J1 = 0.;
   double J2 = 0.;
   double J3 = 0.;
 
-  for( int i = 0; i <= n; i++ ){
+  for(int i=0; i<=n; i++){
 
     double x = i*h;
     double HX = 1./m;
@@ -90,40 +96,36 @@ double TriangleIntegrator::DoubleIntegral(func f, //Integrand
       double y = j*HX;
       double Q = TransfIntegrand( f, vert, x, y );
 
-      if (j%2 == 0) K2 += Q;
+      if ( j%2 == 0 ) K2 += Q;
 
       else K3 += Q;
     }
 
-    double L = (K1 + 2.*K2 + 4.*K3)*HX/3.;
+    double L = ( K1 + 2.*K2 + 4.*K3 )*HX/3.;
 
-    if (i == 0 || i == n) J1 += L;
+    if ( i==0 || i==n ) J1 += L;
 
-    else if( i%2 == 0) J2 += L;
+    else if( i%2 == 0 ) J2 += L;
 
     else J3 += L;
   }
 
-  double J = h*( J1 + 2.*J2 + 4.*J3 ) / 3.;
+  double J = h*( J1 + 2.*J2 + 4.*J3 )/3.;
 
   return J;
 }
 
-double TriangleIntegrator::DoubleIntegral(func f, //Integrand
-                                          vec N1,
-                                          mat vert, //Vertices
-                                          double n, double m //Parameters for integration
-                                          ){
+//Here we include vec N1, because some integrands have one polynomial for integrands of the form f(x,y)N1 (see references)
+double TriangleIntegrator::DoubleIntegral( func f, vec N1, mat vert, 
+                                           int n, int m ){
 
-  //Here we apply Simpson's Double Integral method. This is not a general method. It is simplified for the current problem
-  //in order to save memory and optimize the algorithm
 
   double h = 1./n;
   double J1 = 0.;
   double J2 = 0.;
   double J3 = 0.;
 
-  for( int i = 0; i <= n; i++ ){
+  for (int i=0; i<=n; i++){
 
     double x = i*h;
     double HX = 1./m;
@@ -133,46 +135,43 @@ double TriangleIntegrator::DoubleIntegral(func f, //Integrand
     double K3 = 0.;
 
 
-    for (int j = 1; j < m; j++){
+    for (int j=1; j<m; j++){
 
       double y = j*HX;
       double Q = TransfIntegrand( f, N1, vert, x, y );
 
-      if (j%2 == 0) K2 += Q;
+      if ( j%2 == 0 ) K2 += Q;
 
       else K3 += Q;
     }
 
-    double L = (K1 + 2.*K2 + 4.*K3)*HX/3.;
+    double L = ( K1 + 2.*K2 + 4.*K3 )*HX/3.;
 
-    if (i == 0 || i == n) J1 += L;
+    if ( i==0 || i==n) J1 += L;
 
     else if( i%2 == 0) J2 += L;
 
     else J3 += L;
   }
 
-  double J = h*( J1 + 2.*J2 + 4.*J3 ) / 3.;
+  double J = h*( J1 + 2.*J2 + 4.*J3 )/3.;
 
   return J;
 }
 
-double TriangleIntegrator::DoubleIntegral(func f, //Integrand
-                                          vec N1,
-                                          vec N2,
-                                          mat vert, //Vertices
-                                          double n, double m //Parameters for integration
-                                          ){
+//Once again, we include another polynomial for integrands of the form f(x,y)N1*N2 (see references)
+double TriangleIntegrator::DoubleIntegral( func f, vec N1,
+                                           vec N2, mat vert, 
+                                           int n, int m ){
 
-  //Here we apply Simpson's Double Integral method. This is not a general method. It is simplified for the current problem
-  //in order to save memory and optimize the algorithm
+
 
   double h = 1./n;
   double J1 = 0.;
   double J2 = 0.;
   double J3 = 0.;
 
-  for( int i = 0; i <= n; i++ ){
+  for( int i=0; i<=n; i++ ){
 
     double x = i*h;
     double HX = 1./m;
@@ -182,26 +181,26 @@ double TriangleIntegrator::DoubleIntegral(func f, //Integrand
     double K3 = 0.;
 
 
-    for (int j = 1; j < m; j++){
+    for (int j=1; j<m; j++){
 
       double y = j*HX;
       double Q = TransfIntegrand( f, N1, N2, vert, x, y );
 
-      if (j%2 == 0) K2 += Q;
+      if ( j%2 == 0 ) K2 += Q;
 
       else K3 += Q;
     }
 
-    double L = (K1 + 2.*K2 + 4.*K3)*HX/3.;
+    double L = ( K1 + 2.*K2 + 4.*K3 )*HX/3.;
 
-    if (i == 0 || i == n) J1 += L;
+    if (i==0 || i==n) J1 += L;
 
     else if( i%2 == 0) J2 += L;
 
     else J3 += L;
   }
 
-  double J = h*( J1 + 2.*J2 + 4.*J3 ) / 3.;
+  double J = h*( J1 + 2.*J2 + 4.*J3 )/3.;
 
   return J;
 }
