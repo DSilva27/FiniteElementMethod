@@ -34,7 +34,7 @@ int main(){
   
   ex.results_to_variable( gamma, N_coef );
   
-  ex.generate_data();
+  ex.generate_data( 0, 0.6, 0, 0.4, 0.01 );
   
   return 0;
 }
@@ -56,7 +56,7 @@ double G2(double x, double y){
 
   if ( ((x >= 0 && x <= 0.2) && (y >= 0.2 && y <= 0.4)) or ((x > 0.4 && x <= 0.5) && (y >= 0.1 && y <= 0.2)) ){
     
-      return (x + y)/2;
+      return (x + y)/sqrt(2);
   }
   
   else if ( ((x > 0.2 && x <= 0.4) && (y == 0.2)) or ((x > 0.5 && x <= 0.6) && (y == 0.1 )) ){

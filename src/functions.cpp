@@ -237,11 +237,10 @@ double FiniteElement::evaluate( double x, double y ){
 }
 
 
-void FiniteElement::generate_data(){
+void FiniteElement::generate_data( float x_min, float x_max,
+                                   float y_min, float y_max,
+                                   float delta ){
   ofstream data_file( "data/results/data_eval.txt", ios::out );
-  float x_min = 0, x_max = 0.6;
-  float y_min = 0, y_max = 0.4;
-  float delta = 0.01;
   float x, y;
   double eval;
   

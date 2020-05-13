@@ -40,7 +40,7 @@ class FiniteElement{
   void N_coef_to_variable( cube& );
   void results_to_variable( vec&, cube& );
   double evaluate( double, double );
-  void generate_data();
+  void generate_data( float, float, float, float, float );
   ~FiniteElement();
   
   private:
