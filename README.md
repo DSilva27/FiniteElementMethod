@@ -38,11 +38,11 @@ Carolina Herrera Segura, David Silva Sánchez
 * Clone the [original repository](https://github.com/DavidSS0397/FiniteElementMethod.git).
 * Open a terminal in the cloned repository and run:
 
-```make```
+```$ make```
 
 * Run the compiled file ```solver```
 
-```./solver```
+```$ ./solver```
 
 ## What does it do?
 
