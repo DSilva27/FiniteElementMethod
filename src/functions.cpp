@@ -248,10 +248,10 @@ void FiniteElement::generate_data(){
   int xrange = (x_max - x_min)/delta + 1;
   int yrange = (y_max - y_min)/delta + 1;
   
-  for(int i=0; i<xrange; i++){
-    for(int j=0; j<yrange; j++){
-      x = x_min + i*delta;
-      y = y_min + j*delta;
+  for(int i=0; i<yrange; i++){
+    for(int j=0; j<xrange; j++){
+      x = x_min + j*delta;
+      y = y_min + i*delta;
       
       eval = evaluate( x, y );
       
