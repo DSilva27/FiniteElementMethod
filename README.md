@@ -80,7 +80,7 @@ The code includes a test problem. To use generally, change the files 'data_trian
 
 The Finite Element Method solves the PDF by dividing the plane of integration in triangular elements and solving the equation for each triangle. The present code doesn't divide the desired plane, so the information of this division must be given as input in the files mentioned above ordered according to the following rules:
 
-* T<sub>0</sub>,...,T<sub>K-1</sub>: internal triangels.
+* T<sub>0</sub>,...,T<sub>K-1</sub>: internal triangles.
 * T<sub>K</sub>,...,T<sub>N-1</sub>: triangles with at least one edge in S2.
 * T<sub>N</sub>,...,T<sub>M-1</sub>: triangles with at least one edge in S1.
 
