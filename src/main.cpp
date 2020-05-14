@@ -24,8 +24,8 @@ int main(){
 
   vfunc VFUNC{ P, Q, R, F, G, G1, G2 };
   FiniteElement ex;
-  vector< double > gamma;
-  vector< vector< vector < double > > > N_coef;
+  vec gamma;
+  cube N_coef;
   double res;
   
   ex.load_data();
