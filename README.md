@@ -28,9 +28,8 @@ Carolina Herrera Segura, David Silva Sánchez
 |       ├── N_coef_results.txt
 |       └── data_eval.txt
 └──extras  
-    ├── images
-    |   └──IntSurface.png
-    └── DataVisualization.ipynb
+    └── images
+        └──IntSurface.png
 ```
 
 ## Installation
