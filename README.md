@@ -164,3 +164,9 @@ Compare the image with the files in ```data/input``` and the boundary conditions
 
 The algorithms used in this project where taken from:
 Burden, R., & Faires, J. D. (2004). Numerical analysis. Cengage Learning.
+
+Double Integrals in a triangle:
+http://connor-johnson.com/2014/03/09/integrals-over-arbitrary-triangular-regions-for-fem/
+
+Check if a point is inside a triangle:
+https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
